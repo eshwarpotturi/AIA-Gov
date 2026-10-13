@@ -37,5 +37,16 @@ Result: other-desk data shown to the trader = 0; writes to prices or bookings = 
 - `test/dryrun.js` — full run against a scripted fake model (no network)
 - `data.js` — the recorded event log the page replays
 
+## What is real in this version (read before presenting)
+| Part | Real? |
+|---|---|
+| Orchestrator, Trade, Position, Market Data, Risk agents | Real LLM agents (system prompt, tools, multi-step tool-calling loop) |
+| The Gate | Real deterministic code - every decision on the page was made by it |
+| Trader's requests | Scripted per scene - they steer the Orchestrator |
+| Governance | One LLM decision per exception (grant/refuse); isolation is a code rule; rule fixes are pre-coded, the LLM writes the note |
+| Auditor | One LLM call that writes each probe, guided by a hint; the 3 weaknesses are planted |
+| Compliance | Not implemented - rule versions are auto-approved in this demo |
+| Page | A replay of one recorded run, not live |
+
 ## Limits (say these out loud)
 Synthetic data and fictional clients; one trader, two desks, four systems — it demonstrates the method, not coverage of a 160+ system estate. The Auditor runs agents in an explicit "assume compromised" mode, because that is how a control is tested: the Gate must hold even when the agent misbehaves. Control-testing agents add to human penetration testing; they don't replace it. This sits on top of the identity stack a bank already has (Okta / SailPoint / Entra etc.), it does not replace it.

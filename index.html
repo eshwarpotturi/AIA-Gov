@@ -277,7 +277,7 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
   document.getElementById("restart").onclick = restart;
   document.querySelectorAll(".speed button").forEach(b => b.onclick = () => { speed = +b.dataset.s; document.querySelectorAll(".speed button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); });
   const s = R.summary, d = new Date(s.run_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-  document.getElementById("foot").textContent = `Recorded run ${d} IST · ${s.model} via Straive LLM Foundry · ${s.calls} model calls · about ₹${s.cost_inr} · replayed step by step. The Gate is plain code; the agents, Governance and Auditor are the model.`;
+  document.getElementById("foot").textContent = `Recorded run ${d} IST · ${s.model} via Straive LLM Foundry · ${s.calls} model calls · about ₹${s.cost_inr} · replayed step by step. The Gate is plain code and the 5 working agents are real LLM agents. In this version the trader's requests are scripted per scene, Governance and the Auditor are single LLM calls, and Compliance approval is automatic.`;
   restart();
 })();
 </script></body></html>
