@@ -1,0 +1,72 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agent Entitlements Brief</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Sans+Condensed:wght@700&family=IBM+Plex+Mono&display=swap">
+<style>
+:root{--bg:#0e1420;--panel:#151d2b;--ink:#e9edf5;--muted:#9aa6ba;--line:#2a3748;--accent:#6b8afd;--allow:#52d39a;--deny:#ff7a7a;--hold:#f2c45a;--filt:#62c6ff;--gov:#c58be8;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "IBM Plex Sans",system-ui,sans-serif}
+.w{max-width:980px;margin:0 auto;padding:24px 16px 48px;display:grid;gap:22px}
+h1,h2{font-family:"IBM Plex Sans Condensed",system-ui,sans-serif;margin:0;line-height:1.1}h1{font-size:clamp(1.6rem,4vw,2.4rem)}h2{font-size:1.3rem}
+.eb{font:12px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+p{margin:0}.m{color:var(--muted)}
+.one{font-family:"IBM Plex Sans Condensed",sans-serif;font-size:1.35rem;border-left:5px solid var(--accent);background:var(--panel);padding:12px 16px;border-radius:0 10px 10px 0}
+section{display:grid;gap:10px}
+table{width:100%;border-collapse:collapse;font-size:.92rem}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--muted);font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}
+.tw{overflow-x:auto}
+.flow{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px}.box b{display:block;font-family:"IBM Plex Sans Condensed",sans-serif}
+.box.gate{border-color:var(--accent)}.box.gov{border-color:var(--gov)}
+ul{margin:0;padding-left:20px;display:grid;gap:4px}
+.k{font:12px "IBM Plex Mono",monospace}.a{color:var(--allow)}.d{color:var(--deny)}.h{color:var(--hold)}.f{color:var(--filt)}
+a{color:var(--accent)}
+</style></head><body><div class="w">
+<header style="display:grid;gap:8px"><div class="eb">Straive Innovation · AI agent entitlements · architecture brief</div>
+<h1>Maker-checker for AI agent permissions</h1>
+<p class="one">AI proposes, Compliance approves, code enforces, and every attack makes the rules stronger.</p>
+<p class="m">Live demo: <a href="./index.html">the $2M question, replayed</a>.</p></header>
+
+<section><h2>The problem</h2>
+<p>A bank with 160+ systems already has AI agents working across them, but no central control over <b>which agent may do what, on whose behalf</b>. When a trader asks an assistant “why does my desk show a $2M discrepancy?”, the assistant needs trades, positions, prices and risk from four systems. The trader may see his own desk's trades but <b>not another desk's confidential positions or clients</b>. The agents must keep those restrictions even when they combine information. Agents usually run on broad service accounts, so without this control an agent becomes a back door.</p></section>
+
+<section><h2>The design: three layers</h2>
+<div class="flow">
+<div class="box"><b>Trader</b><span class="m">asks one question; his identity rides on every call</span></div>
+<div class="box"><b>Orchestrating agent</b><span class="m">always in the path; asks Trade, Position, Market Data, Risk agents</span></div>
+<div class="box gate"><b>The Gate (code)</b><span class="m">every call: agent mandate ∩ human entitlement → <span class="a">allow</span> / <span class="f">filter</span> / <span class="d">deny</span> / <span class="h">hold for human</span>. No LLM, fails closed.</span></div>
+<div class="box gov"><b>Governance agent</b><span class="m">exceptions only: narrow, time-boxed, aggregate-only grants; isolates rogue agents; drafts rule fixes</span></div>
+<div class="box"><b>Auditor agent + Compliance</b><span class="m">attacks the rules each round; humans approve every new rule version</span></div>
+</div>
+<p class="m">This answers the “one overarching agent vs rules” question: <b>both, at different layers</b>. The Orchestrator coordinates; deterministic rules decide; the governing AI only handles exceptions and never widens access on its own. An LLM in the enforcement path could be talked into “yes”, so enforcement stays in code.</p></section>
+
+<section><h2>What the demo shows</h2><div class="tw"><table>
+<tr><th>Moment</th><th>Control</th><th>Outcome</th></tr>
+<tr><td>Position and price reads for his own book</td><td>Mandate + entitlement</td><td class="a">Allowed; stale JGB 30Y price explains −$1.2M</td></tr>
+<tr><td>Another desk's trade in his book (T-2207)</td><td>Row and field filtering</td><td class="f">Allowed, filtered: row visible, client/size/desk withheld</td></tr>
+<tr><td>Risk agent (firm-wide account) asks for Credit desk exposure</td><td>Principal ∩ agent</td><td class="d">Denied: the agent can, the trader can't</td></tr>
+<tr><td>“How much does T-2207 cost me?”</td><td>Governance exception</td><td class="a">15-min aggregate-only view: −$0.8M; break to Middle Office</td></tr>
+<tr><td>Hijacked agent overwrites price / moves the trade</td><td>Default deny + isolation</td><td class="d">Both denied; agent isolated</td></tr>
+<tr><td>Auditor: firm total − own desk; ‘all’ books; free-text note</td><td>Continuous hardening</td><td class="h">3 gaps → 3 fixes (v2–v4) → re-tests hold</td></tr>
+</table></div></section>
+
+<section><h2>Mapped to OWASP Top 10 for Agentic Applications (2026)</h2><div class="tw"><table>
+<tr><th>Risk</th><th>Where in the demo</th></tr>
+<tr><td>ASI03 Identity & privilege abuse</td><td>Principal ∩ agent; filtered rows; aggregation, wildcard and free-text gaps found and closed</td></tr>
+<tr><td>ASI01 Goal hijack</td><td>Rogue “make P&L tie” instruction</td></tr>
+<tr><td>ASI10 Rogue agents</td><td>Isolation after repeated out-of-mandate writes</td></tr>
+</table></div></section>
+
+<section><h2>Where this sits in the market</h2>
+<p class="m">We do not claim a world first. We combine known pieces and fill a specific gap, on top of the identity stack the bank already runs. (References from the team's earlier research.)</p>
+<div class="tw"><table>
+<tr><th>Exists today</th><th>What it does</th><th>What we add</th></tr>
+<tr><td>Gateway policy enforcement (e.g. AWS Bedrock AgentCore Policy; Progent, UC Berkeley)</td><td>Deterministic checks on agent tool calls; LLM can write policy, code enforces</td><td>The human principal's entitlement carried through multi-agent chains</td></tr>
+<tr><td>Red-vs-blue hardening (e.g. RvB, Shanghai AI Lab)</td><td>Attack/defend loops for code and guardrails</td><td>Applied to agent permissions; every finding becomes a Compliance-approved rule</td></tr>
+<tr><td>Identity vendors (Okta, Ping, SailPoint, Saviynt, Microsoft Entra Agent ID)</td><td>Agent identities and access governance</td><td>Runtime delegation chains, just-in-time narrow grants, and assurance findings turned into live rules: areas a 2026 industry review said none fully covers</td></tr>
+</table></div></section>
+
+<section><h2>Limits</h2><ul>
+<li>Synthetic data and fictional clients; one trader, two desks, four systems. It demonstrates the method, not coverage of 160+ systems.</li>
+<li>The Auditor runs agents in an explicit “assume compromised” mode, because a control has to hold even when the agent misbehaves.</li>
+<li>Control-testing agents add to human penetration testing; they don't replace it.</li>
+<li>The replay is one recorded real run (GPT-4.1-mini via Straive LLM Foundry, about ₹1.4), not a live system.</li>
+</ul></section>
+</div></body></html>

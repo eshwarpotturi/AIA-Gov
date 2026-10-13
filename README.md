@@ -1,33 +1,41 @@
-# Agent Governance — Maker-Checker for AI Agent Permissions
+# Agent Governance Floor — "The $2M question"
 
-**Live replay (animated bank ops floor):** https://eshwarpotturi.github.io/agent-governance-maker-checker/
+**Maker-checker for AI agent permissions: AI proposes, Compliance approves, code enforces, and every attack makes the rules stronger.**
 
-Governing what AI agents may do across a bank's systems — the "entitlements for agents" problem — shown as a top-down operations floor you can watch.
+A trader on the JGB desk asks an AI assistant: *"Why does my trading desk show a $2 million discrepancy in today's positions?"*
+An **Orchestrating agent** answers by asking four specialist agents (**Trade, Position, Market Data, Risk**). The demo shows how entitlement and governance controls make sure every agent retrieves only what *this trader* may see, even when it combines information from several systems.
 
-**Maker-checker:** AI proposes, Compliance approves, code enforces, and every incident makes the rules stronger.
+- `index.html` — animated replay of one recorded run (open it, press Play) · `brief.html` — architecture brief
 
-- **The Gate** — a deterministic entitlement check on every agent action (plain code, no LLM, fails closed).
-- **Governance agent (checker)** — handles exceptions only: grants narrow, masked, time-boxed access; isolates an agent that exceeds its mandate; drafts rule changes. Never widens rules without human sign-off.
-- **Control assurance (auditor)** — stress-tests the rules each round; gaps found become new rules, re-tested, approved by Compliance.
+## How the control works
+| Layer | What it is | When it acts |
+|---|---|---|
+| **The Gate** | Deterministic code, no LLM. Checks every tool call twice: may this **agent** use this tool (mandate) *and* may this **human** see this data (entitlement)? Effective access = principal ∩ agent. Fails closed. | Every call |
+| **Governance agent** (the checker) | Grants narrow, time-boxed, aggregate-only exceptions; isolates an agent that exceeds its mandate; drafts rule fixes. Never widens the rulebook without human sign-off. | Exceptions only |
+| **Auditor agent** (control assurance) | Attacks the rules like internal audit, assuming agents are compromised. Every gap becomes a rule fix → Compliance approves → the same attack is re-run. | Each round |
+| **Compliance / Middle Office** | Humans: approve rule versions; investigate breaks. | Sign-off, breaks |
 
-## The replayed run (trade operations, synthetic data, GPT-4.1-mini)
-3 working agents (Reconciliation, Settlement, Reporting), 6 systems, one Gate.
+## The replayed run (synthetic data, GPT-4.1-mini via Straive LLM Foundry)
+| Scene | What happens | Lifecycle step | OWASP Agentic 2026 |
+|---|---|---|---|
+| 0 | Two rulebooks (agent mandates, human entitlements); Compliance approves v1 | — | — |
+| 1 | Kenji asks the $2M question; Orchestrator fans out | 4, 5, 7 | — |
+| 2 | Positions + prices allowed; JGB 30Y priced at yesterday's close → **-$1.2M** | 2, 7 | — |
+| 3 | Trade T-2207 (Credit desk) sits in his book → **allowed, filtered**: client, size, desk withheld | 4 | ASI03 |
+| 4 | Risk agent (firm-wide service account) asks for Credit desk exposure → **denied**: the agent can, the trader can't | 5 | ASI03 |
+| 5 | Governance grants a 15-min **aggregate-only** view → **-$0.8M**; break raised to Middle Office | 7 | — |
+| 6 | Kenji gets the full answer, with every withheld item named and why | — | — |
+| 7 | Hijacked Orchestrator tries to overwrite a price and move T-2207 → denied → **isolated** | 2, 4 | ASI01, ASI10 |
+| 8 | Auditor: aggregation (firm − own desk), wildcard 'all' books, free-text note leak → 3 gaps, 3 fixes (v2–v4), every re-test holds | — | ASI03 |
 
-| Scene | What happens |
-|---|---|
-| 0 | Governance drafts a least-privilege rulebook; Compliance approves v1 |
-| 1 | Recon raises the genuine reconciliation breaks; every move allowed |
-| 2 | Recon is denied client personal data, requests it, and gets a masked, 60-minute badge |
-| 3 | A hijacked Recon tries to amend the books; every attempt denied; agent isolated |
-| 4 | Arms race, 3 rounds: auditor finds a new gap each round (personal-data over-grant → tolerance tampering → borrowed access via another agent); Governance fixes each; Compliance approves v2, v3, v4; every re-test holds |
-
-Result: books altered by agents = 0, 3 control gaps found and closed, 0 gaps left open, 1 isolation, 4 rulebook versions.
+Result: other-desk data shown to the trader = 0; writes to prices or bookings = 0; 3 control gaps found and closed; 0 left open; 1 isolation; 4 rulebook versions.
 
 ## Files
-- `index.html` — the animated replay (open it, press Play)
-- `core.js` — bank, tools, deterministic gateway, masking, delegation logic
-- `run.js` — the agent loop, governance checker, auditor, and the scenes
-- `data.js` — the recorded event log this page replays
+- `core.js` — synthetic desks/books/trades/prices, tools, the Gate (principal ∩ agent, row filtering, masking), isolation. `node core.test.js` (18 tests)
+- `run.js` — LLM agent loop, Orchestrator delegation, Governance checker, Auditor rounds, the 9 scenes
+- `record.js` — records a real run from a terminal: `node record.js` (token in `.foundry-token`, git-ignored) → writes `data.js`
+- `test/dryrun.js` — full run against a scripted fake model (no network)
+- `data.js` — the recorded event log the page replays
 
-## Limits
-Synthetic data, fictional clients, 3 agents and 6 systems. It demonstrates the method, not coverage of a real 160+ system estate. Control-assurance agents add to human penetration testing; they do not replace it.
+## Limits (say these out loud)
+Synthetic data and fictional clients; one trader, two desks, four systems — it demonstrates the method, not coverage of a 160+ system estate. The Auditor runs agents in an explicit "assume compromised" mode, because that is how a control is tested: the Gate must hold even when the agent misbehaves. Control-testing agents add to human penetration testing; they don't replace it. This sits on top of the identity stack a bank already has (Okta / SailPoint / Entra etc.), it does not replace it.
