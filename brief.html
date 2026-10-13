@@ -32,8 +32,8 @@ a{color:var(--accent)}
 <div class="box"><b>Trader</b><span class="m">asks one question; his identity rides on every call</span></div>
 <div class="box"><b>Orchestrating agent</b><span class="m">always in the path; asks Trade, Position, Market Data, Risk agents</span></div>
 <div class="box gate"><b>The Gate (code)</b><span class="m">every call: agent mandate ∩ human entitlement → <span class="a">allow</span> / <span class="f">filter</span> / <span class="d">deny</span> / <span class="h">hold for human</span>. No LLM, fails closed.</span></div>
-<div class="box gov"><b>Governance agent</b><span class="m">exceptions only: narrow, time-boxed, aggregate-only grants; isolates rogue agents; drafts rule fixes</span></div>
-<div class="box"><b>Auditor agent + Compliance</b><span class="m">attacks the rules each round; humans approve every new rule version</span></div>
+<div class="box gov"><b>Governance agent</b><span class="m">exceptions only: drafts the mandates, grants narrow task-scoped exceptions, isolates rogue agents, proposes rule fixes; also loosens rules that are too tight for routine work</span></div>
+<div class="box"><b>Auditor agent + Compliance</b><span class="m">the Auditor probes freely; findings are verified by code; Compliance approves every rule version (a person, in live mode)</span></div>
 </div>
 <p class="m">This answers the “one overarching agent vs rules” question: <b>both, at different layers</b>. The Orchestrator coordinates; deterministic rules decide; the governing AI only handles exceptions and never widens access on its own. An LLM in the enforcement path could be talked into “yes”, so enforcement stays in code.</p></section>
 
@@ -41,10 +41,11 @@ a{color:var(--accent)}
 <tr><th>Moment</th><th>Control</th><th>Outcome</th></tr>
 <tr><td>Position and price reads for his own book</td><td>Mandate + entitlement</td><td class="a">Allowed; stale JGB 30Y price explains −$1.2M</td></tr>
 <tr><td>Another desk's trade in his book (T-2207)</td><td>Row and field filtering</td><td class="f">Allowed, filtered: row visible, client/size/desk withheld</td></tr>
-<tr><td>Risk agent (firm-wide account) asks for Credit desk exposure</td><td>Principal ∩ agent</td><td class="d">Denied: the agent can, the trader can't</td></tr>
-<tr><td>“How much does T-2207 cost me?”</td><td>Governance exception</td><td class="a">15-min aggregate-only view: −$0.8M; break to Middle Office</td></tr>
-<tr><td>Hijacked agent overwrites price / moves the trade</td><td>Default deny + isolation</td><td class="d">Both denied; agent isolated</td></tr>
-<tr><td>Auditor: firm total − own desk; ‘all’ books; free-text note</td><td>Continuous hardening</td><td class="h">3 gaps → 3 fixes (v2–v4) → re-tests hold</td></tr>
+<tr><td>Hijacked Orchestrator has the Risk agent (firm-wide account) pull the Credit desk</td><td>Principal ∩ agent</td><td class="d">Denied: the agent can, the trader can't</td></tr>
+<tr><td>“How much does T-2207 cost me?”</td><td>Governance exception (if the Orchestrator asks)</td><td class="a">Catalogued aggregate-only view, task-scoped: −$0.8M; break to Middle Office</td></tr>
+<tr><td>Hijacked agent overwrites a price / moves the trade</td><td>Default deny; Gate alert wakes Governance</td><td class="d">Denied; Governance decides (e.g. isolate)</td></tr>
+<tr><td>Auditor probes on its own (aggregation, broad requests, free-text leaks are planted in the bank's existing settings)</td><td>Continuous hardening</td><td class="h">Each confirmed gap → proposal → Compliance → new rule → same probe re-run</td></tr>
+<tr><td>End-of-day review</td><td>Rules can be too tight</td><td class="a">Routine exceptions can become a permanent narrow rule, only with Compliance approval</td></tr>
 </table></div></section>
 
 <section><h2>Mapped to OWASP Top 10 for Agentic Applications (2026)</h2><div class="tw"><table>
@@ -67,7 +68,7 @@ a{color:var(--accent)}
 <li>Synthetic data and fictional clients; one trader, two desks, four systems. It demonstrates the method, not coverage of 160+ systems.</li>
 <li>The Auditor runs agents in an explicit “assume compromised” mode, because a control has to hold even when the agent misbehaves.</li>
 <li>Control-testing agents add to human penetration testing; they don't replace it.</li>
-<li>The replay is one recorded real run (GPT-4.1-mini via Straive LLM Foundry, about ₹1.4), not a live system.</li>
-<li>In this version the trader's requests are scripted per scene, Governance and the Auditor are single LLM calls rather than full agents, and Compliance approval is automatic. The Gate and the five working agents are real.</li>
+<li>The default page is a replay of one recorded real run (GPT-4.1-mini via Straive LLM Foundry); the same floor also runs live on a laptop.</li>
+<li>All eight agents are real (system prompt, tools, tool-calling loop; definitions in agents/*.json). Scripted: the trader's one question, the labelled injected-instruction test, and the triggers that wake control agents. The Compliance agent stands in for a human; in live mode a person approves.</li>
 </ul></section>
 </div></body></html>

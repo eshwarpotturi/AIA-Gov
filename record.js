@@ -12,6 +12,8 @@ global.fetch = async (url, opts) => {
   return realFetch(url.startsWith("/") ? BASE + url : url, opts);
 };
 global.window = { CORE: require("./core.js") };
+window.CORE.AGENT_DEFS = Object.fromEntries(fs.readdirSync(path.join(__dirname, "agents")).filter(f => f.endsWith(".json")).map(f => { const d = JSON.parse(fs.readFileSync(path.join(__dirname, "agents", f), "utf8")); return [d.id, d]; }));
+window.CORE.POLICY_TEXT = fs.readFileSync(path.join(__dirname, "agents", "compliance-policy.md"), "utf8");
 require("./run.js");
 const tick = setInterval(() => { const s = window.CORE.status(1); process.stdout.write(`\r  calls ${s.calls}  events ${s.events}  ~Rs ${s.cost_inr}   `); }, 1500);
 window.CORE.run().then(sum => {
@@ -20,9 +22,17 @@ window.CORE.run().then(sum => {
   fs.writeFileSync(path.join(__dirname, "data.js"), "window.RUN = " + JSON.stringify(r) + ";\n");
   fs.writeFileSync(path.join(__dirname, "run-log.txt"), window.CORE._ST.log.join("\n") + "\n");
   console.log(JSON.stringify(sum, null, 1));
-  const checks = { "answer complete": a && a.complete, "no other-desk data in main story": sum.other_desk_data_shown_in_main_story === 0,
-    "no writes executed": sum.writes_executed === 0, "3 gaps found": sum.gaps_found === 3, "0 gaps open after fix": sum.gaps_open_after_fix === 0,
-    "1 isolation": sum.isolations === 1, "4 rule versions": sum.versions === 4, "break raised": sum.breaks_raised >= 1 };
+  const checks = {
+    "Governance drafted a rulebook Compliance approved": sum.versions >= 1,
+    "trader got a complete answer (-2.0M = -1.2M price + -0.8M T-2207)": sum.answer_complete,
+    "trader's final answer carried no other-desk data": sum.final_answer_leaks === 0,
+    "no writes to prices or bookings executed": sum.writes_executed === 0,
+    "hijack: Governance isolated the agent": sum.isolations >= 1,
+    "Auditor confirmed at least one real gap": sum.findings_confirmed >= 1,
+    "every approved fix held on re-test": sum.retests_open === 0 && sum.retests_held >= 1,
+  };
   console.log("\nChecks:"); let ok = true; for (const [k, v] of Object.entries(checks)) { console.log((v ? "  PASS " : "  FAIL ") + k); ok = ok && !!v; }
-  console.log(ok ? "\nAll scenes landed. data.js written." : "\nSome scenes did not land - data.js written anyway; tell Claude which failed.");
-}).catch(e => { clearInterval(tick); console.error("\nRun failed:", e.message); process.exit(1); });
+  console.log(ok ? "\nAll checks passed. data.js written." : "\nSome checks failed - this run is saved as data.js anyway (it is a real run). Tell Claude which failed.");
+}).catch(e => { clearInterval(tick); console.error("\nRun failed:", e.message);
+  const ST = window.CORE._ST; fs.writeFileSync(path.join(__dirname, "data.failed.js"), "window.RUN = " + JSON.stringify({ events: ST.events, summary: { failed: e.message } }) + ";\n");
+  fs.writeFileSync(path.join(__dirname, "run-log.txt"), ST.log.join("\n") + "\nFAILED: " + e.message + "\n"); console.error("Partial log saved to data.failed.js"); process.exit(1); });

@@ -4,280 +4,333 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-:root{
-  --bg:#0e1420; --panel:#151d2b; --floor:#182334; --floor2:#1d2a3e; --ink:#e9edf5; --muted:#9aa6ba; --line:#2a3748;
-  --accent:#6b8afd; --accent-soft:#1e2b4d; --gov:#c58be8; --gov-soft:#2c2140; --human:#f0f0f0;
-  --allow:#52d39a; --allow-soft:#123524; --deny:#ff7a7a; --deny-soft:#3a1618; --hold:#f2c45a; --hold-soft:#352a12; --filt:#62c6ff; --filt-soft:#10304a;
-  --orch:#6b8afd; --trade:#52c0d3; --position:#e0a85a; --market:#8fd16a; --risk:#f08aa8; --auditor:#c58be8;
-  --f-display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif; --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
-  color-scheme:dark;
-}
-*{box-sizing:border-box} html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
-.wrap{max-width:1240px;margin:0 auto;padding:18px 16px 40px;display:grid;gap:14px}
-h1{font-family:var(--f-display);font-size:clamp(1.4rem,3vw,2.05rem);font-weight:700;margin:0;line-height:1.1}
-h3{font-family:var(--f-display);margin:0;font-weight:700;font-size:1rem}
-p{margin:0}
-.eyebrow{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
-.sub{color:var(--muted);max-width:86ch;font-size:.92rem}
-header{display:grid;gap:6px}
-.q{font-family:var(--f-display);font-size:1.15rem;border-left:4px solid var(--human);padding:4px 12px;background:var(--panel);border-radius:0 8px 8px 0}
-.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+:root{--bg:#0d131e;--panel:#141c2a;--floor:#172131;--floor2:#1c2940;--ink:#eef1f7;--muted:#9fabbf;--line:#2a3749;
+--accent:#6b8afd;--accent-soft:#1d2a4c;--gov:#c58be8;--gov-soft:#2b2040;--human:#f2f2f2;
+--allow:#52d39a;--allow-soft:#10331f;--deny:#ff7a7a;--deny-soft:#3a1517;--hold:#f2c45a;--hold-soft:#352a10;--filt:#62c6ff;--filt-soft:#0f2f48;
+--orchestrator:#6b8afd;--trade:#52c0d3;--position:#e0a85a;--market:#8fd16a;--risk:#f08aa8;--governance:#c58be8;--auditor:#b0a4ff;--compliance:#e9e3c9;
+--fd:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;--fb:"IBM Plex Sans",system-ui,"Segoe UI",sans-serif;--fm:"IBM Plex Mono",ui-monospace,Consolas,monospace;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--fb)}
+.wrap{max-width:1500px;margin:0 auto;padding:16px 16px 40px;display:grid;gap:12px}
+h1{font-family:var(--fd);font-size:clamp(1.4rem,2.6vw,2rem);margin:0;line-height:1.1}h3{font-family:var(--fd);margin:0;font-size:1rem}p{margin:0}
+.eb{font:.72rem var(--fm);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.sub{color:var(--muted);font-size:.9rem;max-width:110ch}
+.q{font-family:var(--fd);font-size:1.12rem;border-left:4px solid var(--human);padding:4px 12px;background:var(--panel);border-radius:0 8px 8px 0}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
 .btn{all:unset;cursor:pointer;font-weight:600;font-size:.88rem;padding:7px 14px;border-radius:7px;background:var(--accent);color:#0b1020}
-.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
-.btn:focus-visible,.speed button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-.scenechip{flex:1 1 220px;min-width:0;font-family:var(--f-mono);font-size:.8rem;color:var(--muted)} .scenechip b{color:var(--ink);font-family:var(--f-body)}
+.btn.g{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.btn:focus-visible,.chap:focus-visible,.speed button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.chaps{display:flex;flex-wrap:wrap;gap:4px;flex:1 1 300px}
+.chap{all:unset;cursor:pointer;font:.72rem var(--fm);padding:4px 8px;border-radius:6px;border:1px solid var(--line);color:var(--muted)}
+.chap.on{border-color:var(--accent);color:var(--ink);background:var(--accent-soft)}
 .speed{display:flex;gap:4px;align-items:center;font-size:.78rem;color:var(--muted)}
-.speed button{all:unset;cursor:pointer;padding:3px 8px;border-radius:5px;border:1px solid var(--line);font-family:var(--f-mono);font-size:.76rem}
-.speed button[aria-pressed="true"]{background:var(--accent);color:#0b1020;border-color:var(--accent)}
-/* lifecycle strip (Aditi's illustrative trade lifecycle) */
+.speed button{all:unset;cursor:pointer;padding:3px 8px;border-radius:5px;border:1px solid var(--line);font:.76rem var(--fm)}
+.speed button[aria-pressed=true]{background:var(--accent);color:#0b1020;border-color:var(--accent)}
 .life{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
-.life div{font-size:.68rem;line-height:1.2;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:5px 6px;transition:all .3s}
-.life div b{display:block;font-family:var(--f-mono);font-size:.62rem;color:var(--muted)}
-.life div.on{color:var(--ink);border-color:var(--accent);background:var(--accent-soft)}
-@media (max-width:700px){.life{grid-template-columns:repeat(4,minmax(0,1fr))}}
-.main{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(0,1fr);gap:14px;align-items:start}
-@media (max-width:960px){.main{grid-template-columns:1fr}}
+.life div{font-size:.68rem;line-height:1.2;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:4px 6px}
+.life div b{display:block;font:.6rem var(--fm)}.life div.on{color:var(--ink);border-color:var(--accent);background:var(--accent-soft)}
+@media(max-width:700px){.life{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.main{display:grid;grid-template-columns:minmax(0,2fr) minmax(320px,1fr);gap:12px;align-items:start}
+@media(max-width:1050px){.main{grid-template-columns:1fr}}
 .col{display:grid;gap:12px;min-width:0}
-.stagewrap{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;display:grid;gap:8px}
-.stage{position:relative;width:100%;aspect-ratio:1.45/1;background:radial-gradient(circle at 50% 46%,var(--floor2),var(--floor) 70%);border-radius:10px;overflow:hidden;border:1px solid var(--line);--bw:52px;--bf:.62rem}
-@media (max-width:640px){.stage{aspect-ratio:1/1.05;--bw:38px;--bf:.54rem}}
-.room,.desk,.gate{position:absolute;transform:translate(-50%,-50%);text-align:center;border-radius:8px;padding:6px 7px;width:19%;min-width:0}
-.room{background:var(--panel);border:1px solid var(--line)}
-.room .rn,.desk .dn,.gate .gn{font-family:var(--f-display);font-weight:700;font-size:.8rem;line-height:1.05}
-.room .rd,.desk .dd,.gate .gd{font-family:var(--f-mono);font-size:.58rem;color:var(--muted);margin-top:2px;line-height:1.2}
-.room .step{position:absolute;top:-8px;left:-6px;font-family:var(--f-mono);font-size:.56rem;background:var(--accent);color:#0b1020;border-radius:999px;padding:0 5px}
-.room.flash-allow{box-shadow:0 0 0 2px var(--allow),0 0 18px var(--allow-soft)} .room.flash-deny{box-shadow:0 0 0 2px var(--deny),0 0 18px var(--deny-soft)} .room.flash-filt{box-shadow:0 0 0 2px var(--filt),0 0 18px var(--filt-soft)}
-.desk{border:1px dashed var(--line);width:17%}
-.desk.gov{background:var(--gov-soft);border-color:var(--gov)} .desk.aud{background:var(--accent-soft);border-color:var(--accent)}
-.desk.human{background:#22262e;border-color:#6d7686;border-style:solid}
-.desk.stamp{box-shadow:0 0 0 2px var(--allow),0 0 18px var(--allow-soft);transition:box-shadow .3s}
-.gate{background:var(--accent-soft);border:2px solid var(--accent);width:20%}
-.gate .decision{font-family:var(--f-mono);font-size:.68rem;font-weight:600;margin-top:2px;min-height:1.1em}
-.gate .chain{font-family:var(--f-mono);font-size:.55rem;color:var(--ink);min-height:1.1em;opacity:.85}
-.gate.allow{border-color:var(--allow);background:var(--allow-soft)} .gate.allow .decision{color:var(--allow)}
-.gate.deny{border-color:var(--deny);background:var(--deny-soft)} .gate.deny .decision{color:var(--deny)}
-.gate.hold{border-color:var(--hold);background:var(--hold-soft)} .gate.hold .decision{color:var(--hold)}
-.gate.filt{border-color:var(--filt);background:var(--filt-soft)} .gate.filt .decision{color:var(--filt)}
-.bot{position:absolute;transform:translate(-50%,-50%);width:calc(var(--bw) + 14px);text-align:center;transition:left .85s cubic-bezier(.5,.05,.3,1),top .85s cubic-bezier(.5,.05,.3,1);z-index:5}
-@media (prefers-reduced-motion:reduce){.bot{transition:none}}
-.bot .body{width:var(--bw);height:calc(var(--bw)*.78);margin:0 auto;border-radius:10px;position:relative;display:grid;place-items:center;box-shadow:0 3px 8px rgba(0,0,0,.35)}
-.bot .body::after{content:"";position:absolute;width:56%;height:22%;border-radius:4px;background:rgba(255,255,255,.85)}
-.bot .eyes{position:absolute;width:36%;height:5px;display:flex;justify-content:space-between;z-index:1}
-.bot .eyes i{width:5px;height:5px;border-radius:50%;background:#0b1020}
-.bot.human .body{border-radius:50% 50% 12px 12px;background:var(--human)} .bot.human .body::after{display:none}
-.bot .nm{font-family:var(--f-mono);font-size:var(--bf);margin-top:2px;color:var(--ink);white-space:nowrap}
-.bot .badge{position:absolute;top:-10px;right:-8px;font-size:.52rem;font-family:var(--f-mono);background:var(--gov);color:#0b1020;border-radius:999px;padding:1px 5px;opacity:0;transition:opacity .3s;white-space:nowrap}
-.bot.hasbadge .badge{opacity:1}
-.bot.orchestrator .body{background:var(--orch)} .bot.trade .body{background:var(--trade)} .bot.position .body{background:var(--position)} .bot.market .body{background:var(--market)} .bot.risk .body{background:var(--risk)} .bot.auditor .body{background:var(--auditor)}
-.bot.ring .body{box-shadow:0 0 0 3px var(--deny),0 0 16px var(--deny-soft)}
-.bot .bubble{position:absolute;bottom:calc(var(--bw) + 6px);left:50%;transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-size:.66rem;width:170px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9;text-align:left}
-.bot.talk .bubble{opacity:1}
-.bot.orchestrator .bubble{bottom:auto;top:50%;left:calc(100% + 4px);transform:translateY(-50%)}
-.bot.auditor .bubble{left:0;transform:none}
-.caption{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:0 10px 10px 0;padding:11px 14px;min-height:70px;display:grid;gap:3px}
-.caption .ct{font-family:var(--f-display);font-weight:700;font-size:1.08rem} .caption .cd{color:var(--muted);font-size:.92rem}
-.legend{display:flex;flex-wrap:wrap;gap:5px 12px;font-size:.74rem;color:var(--muted)}
-.legend i{width:10px;height:10px;border-radius:3px;display:inline-block;vertical-align:-1px;margin-right:4px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;gap:9px;min-width:0}
-.vhead{display:flex;justify-content:space-between;align-items:center}
-.vtag{font-family:var(--f-mono);font-size:.74rem;background:var(--accent);color:#0b1020;padding:2px 9px;border-radius:5px}
-.vnote{font-size:.8rem;color:var(--muted)}
-.rbh{font-family:var(--f-mono);font-size:.64rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:2px}
-.rb{display:grid;gap:2px;font-family:var(--f-mono);font-size:.74rem}
-.rrow{display:grid;grid-template-columns:1fr auto;gap:6px;padding:3px 5px;border-radius:5px;align-items:center}
-.rrow.changed{background:var(--gov-soft);outline:1px solid var(--gov)}
-.eff{font-size:.66rem;padding:1px 6px;border-radius:4px;white-space:nowrap}
-.eff.allow{background:var(--allow-soft);color:var(--allow)} .eff.deny{background:var(--deny-soft);color:var(--deny)} .eff.approval{background:var(--hold-soft);color:var(--hold)} .eff.weak{background:var(--hold-soft);color:var(--hold)}
-.who{font-size:.8rem} .who b{font-family:var(--f-display)}
-.ans{display:grid;gap:6px;font-size:.84rem} .ans ul{margin:0;padding-left:18px;display:grid;gap:3px}
-.ans .k{font-family:var(--f-mono);font-size:.64rem;letter-spacing:.06em;text-transform:uppercase}
-.ans .k.s{color:var(--allow)} .ans .k.w{color:var(--filt)}
-.score{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
-.tile{background:var(--floor);border-radius:8px;padding:9px;text-align:center}
-.tile .v{font-family:var(--f-display);font-size:1.5rem;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
-.tile .v.good{color:var(--allow)} .tile .v.bad{color:var(--deny)}
-.tile .k{font-size:.66rem;color:var(--muted);margin-top:3px}
-footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);padding-top:12px;display:grid;gap:6px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;gap:8px;min-width:0}
+/* stage */
+.stage{position:relative;width:100%;aspect-ratio:16/10.5;background:radial-gradient(circle at 50% 45%,var(--floor2),var(--floor) 72%);border-radius:12px;overflow:hidden;border:1px solid var(--line);--bw:64px;--bf:.7rem}
+@media(max-width:760px){.stage{aspect-ratio:1/1.15;--bw:40px;--bf:.56rem}}
+.zone{position:absolute;transform:translate(-50%,-50%);text-align:center;border-radius:9px;padding:6px 8px;width:15%;background:var(--panel);border:1px solid var(--line)}
+.zone .n{font:700 .82rem/1.05 var(--fd)}.zone .d{font:.6rem/1.2 var(--fm);color:var(--muted);margin-top:2px}
+.zone .step{position:absolute;top:-9px;left:-7px;font:.58rem var(--fm);background:var(--accent);color:#0b1020;border-radius:999px;padding:0 5px}
+.zone.human{background:#23262d;border-color:#737c8c}.zone.ctl{border-style:dashed;border-color:var(--gov);background:var(--gov-soft)}
+.zone.iso{border-style:dashed;border-color:var(--deny);background:transparent}.zone.iso .n{color:var(--deny)}
+.zone.f-allow{box-shadow:0 0 0 2px var(--allow),0 0 22px var(--allow-soft)}.zone.f-deny{box-shadow:0 0 0 2px var(--deny),0 0 22px var(--deny-soft)}.zone.f-filtered{box-shadow:0 0 0 2px var(--filt),0 0 22px var(--filt-soft)}.zone.f-approval{box-shadow:0 0 0 2px var(--hold)}
+.gate{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);width:22%;text-align:center;border-radius:12px;padding:8px;background:var(--accent-soft);border:2px solid var(--accent);z-index:3}
+.gate .n{font:700 .95rem var(--fd)}.gate .d{font:.6rem var(--fm);color:var(--muted)}
+.gate.allow{border-color:var(--allow);background:var(--allow-soft)}.gate.deny{border-color:var(--deny);background:var(--deny-soft)}.gate.approval{border-color:var(--hold);background:var(--hold-soft)}.gate.filtered{border-color:var(--filt);background:var(--filt-soft)}
+/* action card: what is happening, on the floor */
+.act{position:absolute;left:50%;top:21%;transform:translate(-50%,-50%);width:min(64%,560px);background:rgba(13,19,30,.94);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:8px 12px;z-index:8;opacity:0;transition:opacity .2s;pointer-events:none}
+.act.show{opacity:1}.act .w{font:.66rem var(--fm);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.act .t{font:600 .95rem/1.3 var(--fb)}.act .r{font:.74rem/1.35 var(--fm);margin-top:4px;color:var(--muted);max-height:4.1em;overflow:hidden}
+.act.allow{border-left-color:var(--allow)}.act.deny{border-left-color:var(--deny)}.act.approval{border-left-color:var(--hold)}.act.filtered{border-left-color:var(--filt)}.act.ctl{border-left-color:var(--gov)}
+.v{font:700 .72rem var(--fm);padding:1px 7px;border-radius:5px}.v.allow{background:var(--allow-soft);color:var(--allow)}.v.deny{background:var(--deny-soft);color:var(--deny)}.v.approval{background:var(--hold-soft);color:var(--hold)}.v.filtered{background:var(--filt-soft);color:var(--filt)}
+.bot{position:absolute;transform:translate(-50%,-50%);width:calc(var(--bw) + 40px);text-align:center;transition:left .8s cubic-bezier(.5,.05,.3,1),top .8s cubic-bezier(.5,.05,.3,1);z-index:5;cursor:pointer}
+.instant .bot{transition:none}@media(prefers-reduced-motion:reduce){.bot{transition:none}}
+.bot .body{width:var(--bw);height:calc(var(--bw)*.78);margin:0 auto;border-radius:12px;position:relative;display:grid;place-items:center;box-shadow:0 4px 10px rgba(0,0,0,.4);background:var(--c)}
+.bot .body::after{content:"";position:absolute;width:56%;height:22%;border-radius:4px;background:rgba(255,255,255,.88)}
+.bot .eyes{position:absolute;width:34%;display:flex;justify-content:space-between;z-index:1}.bot .eyes i{width:6px;height:6px;border-radius:50%;background:#0b1020}
+.bot.human .body{border-radius:50% 50% 14px 14px}.bot.human .body::after{display:none}
+.bot .nm{font:600 var(--bf) var(--fm);margin-top:3px;white-space:nowrap}
+.bot .tag{position:absolute;bottom:calc(var(--bw)*.78 + 8px);left:50%;transform:translateX(-50%);font:.62rem/1.25 var(--fm);background:var(--c);color:#0b1020;border-radius:6px;padding:2px 7px;white-space:nowrap;max-width:220px;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .2s}
+.bot.busy .tag{opacity:1}
+.bot .say{position:absolute;top:calc(100% + 2px);left:50%;transform:translateX(-50%);width:200px;font-size:.66rem;line-height:1.3;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:5px 8px;text-align:left;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+.bot.talk .say{opacity:1}
+.bot.iso .body{box-shadow:0 0 0 3px var(--deny),0 0 18px var(--deny-soft)}.bot.awake .body{box-shadow:0 0 0 3px var(--c),0 0 20px var(--c)}
+.banner{position:absolute;left:50%;bottom:2%;transform:translateX(-50%);font:600 .78rem var(--fm);background:var(--hold-soft);color:var(--hold);border:1px solid var(--hold);border-radius:8px;padding:4px 10px;opacity:0;transition:opacity .25s;z-index:9;white-space:nowrap}
+.banner.show{opacity:1}
+.cap{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:0 10px 10px 0;padding:10px 14px;min-height:64px}
+.cap .ct{font:700 1.06rem var(--fd)}.cap .cd{color:var(--muted);font-size:.9rem}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.72rem;color:var(--muted)}.legend i{width:10px;height:10px;border-radius:3px;display:inline-block;vertical-align:-1px;margin-right:4px}
+/* rulebook */
+.vh{display:flex;justify-content:space-between;align-items:center;gap:8px}.vtag{font:.74rem var(--fm);background:var(--accent);color:#0b1020;padding:2px 9px;border-radius:5px}
+.rbh{font:.62rem var(--fm);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.rb{display:grid;gap:2px;font:.72rem var(--fm)}
+.rr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;padding:3px 6px;border-radius:5px;align-items:center;transition:background .3s}
+.rr .id{color:var(--muted);font-size:.62rem;display:block}
+.rr.fired{outline:2px solid var(--accent);background:var(--accent-soft)}.rr.changed{outline:1px solid var(--gov);background:var(--gov-soft)}
+.eff{font-size:.64rem;padding:1px 6px;border-radius:4px;white-space:nowrap}
+.eff.allow{background:var(--allow-soft);color:var(--allow)}.eff.deny{background:var(--deny-soft);color:var(--deny)}.eff.approval{background:var(--hold-soft);color:var(--hold)}.eff.weak{background:var(--hold-soft);color:var(--hold)}.eff.grant{background:var(--gov-soft);color:var(--gov)}.eff.off{background:#222;color:var(--muted)}
+.empty{font-size:.76rem;color:var(--deny)}
+/* loop */
+.loop{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;position:relative}
+.loop div{font-size:.66rem;line-height:1.2;text-align:center;border:1px solid var(--line);border-radius:8px;padding:6px 3px;color:var(--muted)}
+.loop div b{display:block;font:.6rem var(--fm)}.loop div.on{border-color:var(--gov);background:var(--gov-soft);color:var(--ink)}
+.loopnote{font-size:.72rem;color:var(--muted)}
+.plog{display:grid;gap:4px;font-size:.74rem;max-height:220px;overflow:auto}
+.plog div{border:1px solid var(--line);border-radius:6px;padding:4px 7px}.plog .st{font:.62rem var(--fm)}
+.ans ul{margin:0;padding-left:18px;display:grid;gap:2px;font-size:.84rem}.k{font:.62rem var(--fm);letter-spacing:.06em;text-transform:uppercase}
+.score{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.tile{background:var(--floor);border-radius:8px;padding:8px;text-align:center}
+.tile .n{font:700 1.4rem/1 var(--fd)}.tile .n.good{color:var(--allow)}.tile .n.bad{color:var(--deny)}.tile .l{font-size:.64rem;color:var(--muted);margin-top:3px}
+/* agent definition dialog */
+dialog{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:12px;max-width:min(720px,94vw);padding:16px}
+dialog::backdrop{background:rgba(0,0,0,.6)}dialog pre{white-space:pre-wrap;font:.74rem/1.45 var(--fm);background:var(--bg);padding:10px;border-radius:8px;max-height:40vh;overflow:auto}
+dialog .row{font-size:.82rem;margin:4px 0}
+footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);padding-top:10px;display:grid;gap:6px}
+.live{font:.7rem var(--fm);color:var(--hold)}
 </style></head><body>
 <div class="wrap">
-  <header>
-    <div class="eyebrow">Maker-checker for AI agent permissions · Global Markets, replayed</div>
+  <header style="display:grid;gap:6px">
+    <div class="eb">Maker-checker for AI agent permissions · Global Markets</div>
     <h1>The trader gets the answer, not the data</h1>
     <p class="q">“Why does my trading desk show a $2 million discrepancy in today's positions?”</p>
-    <p class="sub">An <b>Orchestrating agent</b> answers by asking four specialist agents: <b>Trade</b>, <b>Position</b>, <b>Market Data</b> and <b>Risk</b>. Every call carries the trader's identity through the <b>Gate</b>, which is plain code (no AI) and checks two things: may this agent use this tool, and may this <i>human</i> see this data? <b>Governance</b> wakes only for exceptions. An <b>Auditor</b> attacks the rules, and <b>Compliance</b> signs off every change. AI proposes, Compliance approves, code enforces, and every attack makes the rules stronger.</p>
+    <p class="sub">Eight AI agents, each with its own system prompt, tools and mandate (click any agent to see them). Every action goes through the <b>Gate</b>, which is plain code and checks both the agent's mandate and what the <b>human</b> may see. <b>Governance</b> drafts the rules and handles exceptions, the <b>Auditor</b> attacks them, and <b>Compliance</b> approves every change. AI proposes, Compliance approves, code enforces, and every attack makes the rules stronger.</p>
   </header>
   <div class="life" id="life"></div>
-  <div class="controls">
-    <button class="btn" id="play">▶ Play</button><button class="btn ghost" id="step">Step ▸</button><button class="btn ghost" id="restart">↺ Restart</button>
-    <div class="scenechip" id="scenechip"></div>
-    <div class="speed">speed <button data-s="1.6" aria-pressed="false">0.5×</button><button data-s="1" aria-pressed="true">1×</button><button data-s="0.55" aria-pressed="false">2×</button></div>
+  <div class="bar">
+    <button class="btn" id="play">▶ Play</button><button class="btn g" id="step">Step ▸</button><button class="btn g" id="restart">↺ Restart</button>
+    <div class="chaps" id="chaps"></div>
+    <div class="speed">speed <button data-s="1.5" aria-pressed="false">0.7×</button><button data-s="1" aria-pressed="true">1×</button><button data-s="0.5" aria-pressed="false">2×</button><button data-s="0.25" aria-pressed="false">4×</button></div>
+    <span class="live" id="livebadge"></span>
   </div>
   <div class="main">
     <div class="col">
-      <div class="stagewrap">
-        <div class="stage" id="stage"></div>
-        <div class="legend">
-          <span><i style="background:var(--human)"></i>human</span><span><i style="background:var(--orch)"></i>Orchestrator</span><span><i style="background:var(--trade)"></i>Trade</span><span><i style="background:var(--position)"></i>Position</span><span><i style="background:var(--market)"></i>Market Data</span><span><i style="background:var(--risk)"></i>Risk</span><span><i style="background:var(--auditor)"></i>Auditor</span>
-          <span><i style="background:var(--allow)"></i>allowed</span><span><i style="background:var(--filt)"></i>allowed, filtered</span><span><i style="background:var(--deny)"></i>denied</span><span><i style="background:var(--hold)"></i>held for a human</span>
-        </div>
-      </div>
-      <div class="caption"><div class="ct" id="capT">Ready</div><div class="cd" id="capD">Press Play to watch the floor. Step goes one decision at a time.</div></div>
-      <div class="card" id="anscard"><h3>What the trader gets</h3><div class="ans" id="ans"><p class="vnote">Appears when the Orchestrator answers.</p></div></div>
+      <div class="stage" id="stage"><div class="act" id="act"><div class="w" id="actW"></div><div class="t" id="actT"></div><div class="r" id="actR"></div></div><div class="banner" id="banner"></div></div>
+      <div class="legend"><span><i style="background:var(--allow)"></i>allowed</span><span><i style="background:var(--filt)"></i>allowed, filtered</span><span><i style="background:var(--deny)"></i>denied</span><span><i style="background:var(--hold)"></i>held for a human</span><span><i style="background:var(--gov)"></i>governance / control agents</span><span>· click an agent for its prompt, tools and mandate</span></div>
+      <div class="cap"><div class="ct" id="capT">Ready</div><div class="cd" id="capD">Press Play. Use the scene buttons to jump.</div></div>
+      <div class="card ans" id="ans"><h3>What the trader gets</h3><p class="sub">Appears when the Orchestrator answers.</p></div>
     </div>
     <div class="col">
-      <div class="card">
-        <div class="vhead"><h3>Entitlement rulebook</h3><span class="vtag" id="vtag">v1</span></div>
-        <p class="who" id="who"></p>
-        <p class="vnote" id="vnote"></p>
-        <div class="rbh">What each agent may do</div><div class="rb" id="rbA"></div>
-        <div class="rbh">What the human may see (principal ∩ agent)</div><div class="rb" id="rbD"></div>
-      </div>
-      <div class="card"><h3>Run scoreboard</h3><div class="score" id="score"></div><p class="vnote" id="scorenote"></p></div>
+      <div class="card"><div class="vh"><h3>Rulebook (live)</h3><span class="vtag" id="vtag">no rules</span></div><p class="sub" id="vnote" style="font-size:.76rem"></p>
+        <div class="rbh">What the human may see</div><div class="rb" id="rbE"></div>
+        <div class="rbh">Agent mandates (drafted by Governance)</div><div class="rb" id="rbM"></div>
+        <div class="rbh">Data policy (bank's existing settings)</div><div class="rb" id="rbD"></div>
+        <div class="rbh">Temporary grants and isolation</div><div class="rb" id="rbG"></div></div>
+      <div class="card"><h3>The loop</h3><div class="loop" id="loop"></div><p class="loopnote" id="loopnote">Incident or finding → Governance proposes → Compliance reviews → new rule live → same attack re-run.</p><div class="plog" id="plog"></div></div>
+      <div class="card"><h3>Run scoreboard</h3><div class="score" id="score"></div><p class="sub" id="scorenote" style="font-size:.74rem"></p></div>
     </div>
   </div>
-  <footer><p id="foot"></p><p>Limits: synthetic data and fictional clients; one trader, two desks, four systems, not a 160-system estate. The Auditor runs with agents deliberately set to “assume compromised”, because that is how a control is tested: the Gate must hold even when the agent misbehaves. Control-testing agents add to human penetration testing; they do not replace it.</p></footer>
+  <footer><p id="foot"></p><p>What is real: every agent is an LLM (system prompt, tools, multi-step tool-calling loop) and decided its own actions; the Gate is plain code and made every allow/filter/deny/hold. The trader asked one question. Labelled tests run agents in an explicit “assume compromised” mode, because that is how a control is tested. Compliance here is an agent standing in for a human; in live mode a person approves. Synthetic data, fictional clients: one trader, two desks, four systems.</p></footer>
 </div>
+<dialog id="dlg"><div id="dlgBody"></div><p style="margin-top:10px"><button class="btn g" id="dlgClose">Close</button></p></dialog>
 <script src="data.js"></script>
 <script>
 (() => {
-  const R = window.RUN, E = R.events;
+  const LIVE = /[?&]live\b/.test(location.search);
+  const R = LIVE ? { events: [], summary: null } : window.RUN;
+  const E = R.events;
   const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  const money = n => (n < 0 ? "-" : "") + "$" + (Math.abs(n) / 1e6).toFixed(2) + "M";
   const LIFE = ["Client request", "Pricing & quote", "Execution", "Booking & validation", "Risk & compliance", "Confirmation & settlement", "Reconciliation & reporting"];
   document.getElementById("life").innerHTML = LIFE.map((l, i) => `<div id="life-${i + 1}"><b>${i + 1}</b>${l}</div>`).join("");
-  const ROOMS = { Trades: { x: 14, y: 12, d: "trade capture", s: 4 }, "Market Data": { x: 38, y: 12, d: "internal price feed", s: 2 }, Positions: { x: 62, y: 12, d: "holdings · P&L", s: 7 }, Risk: { x: 86, y: 12, d: "exposure · limits", s: 5 } };
-  const DESKS = { gov: { x: 11, y: 42, n: "Governance", d: "exceptions only", c: "gov" }, aud: { x: 11, y: 68, n: "Auditor", d: "control testing", c: "aud" },
-                  mo: { x: 89, y: 42, n: "Middle Office", d: "human · breaks", c: "human" }, comp: { x: 89, y: 70, n: "Compliance", d: "human sign-off", c: "human" } };
-  const GATE = { x: 50, y: 40 };
-  const HOME = { trade: { x: 28, y: 64 }, market: { x: 40, y: 72 }, position: { x: 60, y: 72 }, risk: { x: 72, y: 64 }, orchestrator: { x: 50, y: 62 }, kenji: { x: 50, y: 88 }, auditor: { x: 11, y: 86 } };
-  const QUAR = { x: 76, y: 90 };
-  const TOOLROOM = { trade_read: "Trades", trade_amend: "Trades", marketdata_read: "Market Data", marketdata_set: "Market Data", position_read: "Positions", impact_read: "Positions", risk_read: "Risk", break_raise: "mo" };
-  const LABEL = { trade_read: "read trades", trade_amend: "amend a booked trade", marketdata_read: "read price", marketdata_set: "overwrite a price", position_read: "read positions", impact_read: "read net impact (aggregate)", risk_read: "read exposure", break_raise: "raise a break to Middle Office", ask_agent: "ask a specialist", request_access: "request an exception" };
-  const NAME = { orchestrator: "Orchestrator", trade: "Trade agent", market: "Market Data agent", position: "Position agent", risk: "Risk agent", auditor: "Auditor", kenji: (R.principal && R.principal.name) || "Trader" };
-  const stage = document.getElementById("stage");
-  for (const [n, p] of Object.entries(ROOMS)) { const d = document.createElement("div"); d.className = "room"; d.id = "room-" + n; d.style.left = p.x + "%"; d.style.top = p.y + "%"; d.innerHTML = `<span class="step">${p.s}</span><div class="rn">${esc(n)}</div><div class="rd">${esc(p.d)}</div>`; stage.appendChild(d); }
-  for (const [k, p] of Object.entries(DESKS)) { const d = document.createElement("div"); d.className = "desk " + p.c; d.id = "desk-" + k; d.style.left = p.x + "%"; d.style.top = p.y + "%"; d.innerHTML = `<div class="dn">${p.n}</div><div class="dd">${p.d}</div>`; stage.appendChild(d); }
-  const gate = document.createElement("div"); gate.className = "gate"; gate.style.left = GATE.x + "%"; gate.style.top = GATE.y + "%";
-  gate.innerHTML = `<div class="gn">The Gate</div><div class="gd">agent mandate ∩ human entitlement · code</div><div class="chain" id="gchain"></div><div class="decision" id="gdec"></div>`; stage.appendChild(gate);
-  const bots = {};
-  function makeBot(key, label, human) { const b = document.createElement("div"); b.className = "bot " + key + (human ? " human" : ""); const h = HOME[key]; b.style.left = h.x + "%"; b.style.top = h.y + "%";
-    b.innerHTML = `<div class="body">${human ? "" : '<div class="eyes"><i></i><i></i></div>'}</div><div class="nm">${esc(label)}</div><span class="badge"></span><div class="bubble"></div>`; stage.appendChild(b); bots[key] = b; }
-  makeBot("kenji", NAME.kenji.split(" ")[0] + " · JGB desk", true); makeBot("orchestrator", "Orchestrator");
-  makeBot("trade", "Trade"); makeBot("market", "Market"); makeBot("position", "Position"); makeBot("risk", "Risk"); makeBot("auditor", "Auditor");
-
-  let speed = 1, timer = null, ptr = 0, busy = false, prevRules = null;
-  const sleep = ms => new Promise(r => setTimeout(r, ms * speed));
-  const pos = k => (DESKS[k] || ROOMS[k] || HOME[k]);
-  const moveBot = (key, p) => { const b = bots[key]; if (!b || !p) return; b.style.left = p.x + "%"; b.style.top = p.y + "%"; };
-  const cap = (t, d) => { document.getElementById("capT").textContent = t; document.getElementById("capD").innerHTML = d; };
-  function bubble(key, text) { const b = bots[key]; if (!b) return; b.querySelector(".bubble").textContent = text.length > 110 ? text.slice(0, 108) + "…" : text; b.classList.add("talk"); clearTimeout(b._t); b._t = setTimeout(() => b.classList.remove("talk"), 2800 * speed); }
-  const badge = (key, text) => { const b = bots[key]; if (!b) return; if (text) { b.querySelector(".badge").textContent = text; b.classList.add("hasbadge"); } else b.classList.remove("hasbadge"); };
-  const sceneChip = (n, t) => document.getElementById("scenechip").innerHTML = `Scene ${n} · <b>${esc(t)}</b>`;
-  const life = arr => { for (let i = 1; i <= 7; i++) document.getElementById("life-" + i).classList.toggle("on", !!(arr && arr.includes(i))); };
-  const chainText = c => (c || []).map(x => NAME[x] ? NAME[x].replace(" agent", "") : x).join(" → ");
-
-  const DATA_LABEL = {
-    firm: v => ["firm-wide totals", v === "allow" ? "open (weak)" : v === "approval" ? "human" : "deny", v === "allow" ? "weak" : v],
-    wildcard: v => ["book = 'all'", v === "passthrough" ? "unchecked (weak)" : "own books only", v === "passthrough" ? "weak" : "allow"],
-    free_text: v => ["notes on other-desk rows", v === "keep" ? "shown (weak)" : "withheld", v === "keep" ? "weak" : "allow"],
+  const ZONES = {
+    Trades: { x: 13, y: 9, d: "trade capture", s: 4 }, "Market Data": { x: 32, y: 9, d: "internal price feed", s: 2 }, Positions: { x: 51, y: 9, d: "holdings · P&L", s: 7 }, Risk: { x: 70, y: 9, d: "exposure · limits", s: 5 },
+    "Middle Office": { x: 89, y: 9, d: "human · breaks", c: "human" },
+    Governance: { x: 9, y: 33, d: "the checker", c: "ctl" }, Auditor: { x: 9, y: 66, d: "control testing", c: "ctl" }, Compliance: { x: 91, y: 33, d: "approves rule changes", c: "ctl" }, Isolation: { x: 91, y: 66, d: "pending human review", c: "iso" },
   };
-  function renderRules(rv) {
-    document.getElementById("vtag").textContent = "v" + rv.version;
-    document.getElementById("vnote").textContent = (rv.change && rv.change !== "baseline" ? "Change: " + rv.change + ". " : "") + (rv.note || "");
-    const pm = prevRules ? new Map(prevRules.rules.map(r => [r.agent + "|" + r.tool, r.effect])) : null;
-    document.getElementById("rbA").innerHTML = rv.rules.map(r => { const ch = pm && pm.get(r.agent + "|" + r.tool) !== r.effect;
-      return `<div class="rrow ${ch ? "changed" : ""}"><span>${esc(NAME[r.agent].replace(" agent", ""))} · ${esc(LABEL[r.tool] || r.tool)}</span><span class="eff ${r.effect}">${r.effect === "approval" ? "human" : r.effect}</span></div>`; }).join("")
-      + `<div class="rrow"><span>anything else (incl. every write to prices or bookings)</span><span class="eff deny">deny</span></div>`;
-    const P = (R.principal || {});
-    const rows = [[`${esc(P.name || "trader")}: books`, (P.books || []).join(", "), "allow", false], ["other desks' books & desks", "", "deny", false],
-                  ["other-desk rows in own book", "masked", "allow", false]];
-    for (const k of ["firm", "wildcard", "free_text"]) { const [l, v, c] = DATA_LABEL[k](rv.data[k]); rows.push([l, v, c, prevRules && prevRules.data[k] !== rv.data[k]]); }
-    document.getElementById("rbD").innerHTML = rows.map(([l, v, c, ch]) => `<div class="rrow ${ch ? "changed" : ""}"><span>${l}</span><span class="eff ${c}">${esc(v || c)}</span></div>`).join("");
-    prevRules = rv;
+  const TOOLZONE = { trade_read: "Trades", trade_amend: "Trades", marketdata_read: "Market Data", marketdata_set: "Market Data", position_read: "Positions", impact_read: "Positions", risk_read: "Risk", break_raise: "Middle Office" };
+  const HOME = { orchestrator: { x: 50, y: 62 }, trade: { x: 24, y: 58 }, market: { x: 36, y: 74 }, position: { x: 64, y: 74 }, risk: { x: 76, y: 58 }, kenji: { x: 50, y: 88 },
+                 governance: { x: 9, y: 47 }, auditor: { x: 9, y: 80 }, compliance: { x: 91, y: 47 } };
+  const ISO = { x: 91, y: 80 };
+  const LABEL = { trade_read: "read trades", trade_amend: "move a booked trade", marketdata_read: "read a price", marketdata_set: "overwrite a price", position_read: "read positions", impact_read: "read a trade's net impact", risk_read: "read exposure", break_raise: "raise a break", ask_agent: "ask a specialist", request_access: "ask Governance for an exception",
+    read_tool_catalog: "read the tool catalog", read_rulebook: "read the rulebook", read_gate_log: "read the Gate log", read_grant_catalog: "read the grant catalog", read_policy: "read the written policy" };
+  const stage = document.getElementById("stage");
+  for (const [n, z] of Object.entries(ZONES)) { const d = document.createElement("div"); d.className = "zone " + (z.c || ""); d.id = "z-" + n; d.style.left = z.x + "%"; d.style.top = z.y + "%";
+    d.innerHTML = (z.s ? `<span class="step">${z.s}</span>` : "") + `<div class="n">${esc(n)}</div><div class="d">${esc(z.d)}</div>`; stage.appendChild(d); }
+  const gate = document.createElement("div"); gate.className = "gate"; gate.id = "gate"; gate.innerHTML = `<div class="n">The Gate</div><div class="d">code · agent mandate ∩ human entitlement</div>`; stage.appendChild(gate);
+  // agents
+  const SETUP = () => E.find(e => e.kind === "setup") || { agents: {}, principal: {} };
+  const bots = {};
+  function makeBot(id, label, human) { const b = document.createElement("div"); b.className = "bot" + (human ? " human" : ""); b.style.setProperty("--c", `var(--${human ? "human" : id})`);
+    const h = HOME[id]; b.style.left = h.x + "%"; b.style.top = h.y + "%";
+    b.innerHTML = `<span class="tag"></span><div class="body">${human ? "" : '<div class="eyes"><i></i><i></i></div>'}</div><div class="nm">${esc(label)}</div><div class="say"></div>`;
+    b.onclick = () => showDef(id); stage.appendChild(b); bots[id] = b; }
+  [["kenji", "Trader", 1], ["orchestrator", "Orchestrator"], ["trade", "Trade"], ["market", "Market Data"], ["position", "Position"], ["risk", "Risk"], ["governance", "Governance"], ["auditor", "Auditor"], ["compliance", "Compliance"]].forEach(a => makeBot(...a));
+  const NAME = id => ({ kenji: (SETUP().principal || {}).name || "Trader" }[id] || ((SETUP().agents || {})[id] || {}).name || id);
+  const short = id => id === "kenji" ? ((SETUP().principal || {}).name || "Trader").split(" ")[0] : NAME(id).replace(" agent", "");
+
+  // ---------- state ----------
+  let S; function resetState() { S = { rules: [], data: null, version: 0, grants: {}, iso: new Set(), props: [], loop: 0, fired: null, changed: new Set() }; }
+  let speed = 1, ptr = 0, timer = false, busy = false, instant = false;
+  const sleep = ms => instant ? Promise.resolve() : new Promise(r => setTimeout(r, ms * speed));
+  const pos = k => ZONES[k] || HOME[k];
+  const move = (id, p) => { const b = bots[id]; if (b && p) { b.style.left = p.x + "%"; b.style.top = p.y + "%"; } };
+  const home = id => move(id, S.iso.has(id) ? ISO : HOME[id]);
+  const tag = (id, t) => { const b = bots[id]; if (!b) return; b.querySelector(".tag").textContent = t || ""; b.classList.toggle("busy", !!t); };
+  function say(id, t) { const b = bots[id]; if (!b || instant) return; b.querySelector(".say").textContent = t.length > 160 ? t.slice(0, 158) + "…" : t; b.classList.add("talk"); clearTimeout(b._t); b._t = setTimeout(() => b.classList.remove("talk"), 3200 * speed); }
+  const cap = (t, d) => { document.getElementById("capT").textContent = t; document.getElementById("capD").innerHTML = d; };
+  function card(cls, w, t, r) { if (instant) return; const a = document.getElementById("act"); a.className = "act show " + (cls || ""); document.getElementById("actW").innerHTML = w; document.getElementById("actT").innerHTML = t; document.getElementById("actR").innerHTML = r || ""; }
+  const hideCard = () => document.getElementById("act").classList.remove("show");
+  function banner(t) { const b = document.getElementById("banner"); b.textContent = t || ""; b.classList.toggle("show", !!t); }
+  const flash = (z, c) => { const el = document.getElementById("z-" + z); if (!el || instant) return; el.classList.add("f-" + c); setTimeout(() => el.classList.remove("f-" + c), 1100 * speed); };
+  const lifeOn = arr => { for (let i = 1; i <= 7; i++) document.getElementById("life-" + i).classList.toggle("on", !!(arr && arr.includes(i))); };
+  const argsTxt = a => Object.entries(a || {}).filter(([k]) => k !== "request").map(([k, v]) => k + ": " + v).join(", ");
+  function resultTxt(e) {
+    if (e.decision === "deny") return "Reason: " + esc(e.reason);
+    if (e.decision === "approval") return esc(e.reason) + ". Not executed.";
+    let r = e.result || ""; try { const j = JSON.parse(r);
+      if (e.tool === "position_read") r = [].concat(j).map(b => `${b.book}: system $${(b.mv_system / 1e6).toFixed(2)}M` + (b.discrepancy != null ? ` vs blotter $${(b.mv_desk_blotter / 1e6).toFixed(2)}M → ${(b.discrepancy / 1e6).toFixed(2)}M` : "")).join(" · ");
+      else if (e.tool === "marketdata_read") r = `${j.instrument}: feed ${j.price} (${j.as_of}) vs vendor close ${j.vendor_close_today}`;
+      else if (e.tool === "trade_read") r = [].concat(j).map(t => t.flag ? `${t.trade_id}: ••• withheld (another desk)` + (t.note && !/withheld/.test(t.note) ? " · note: “" + t.note + "”" : "") : `${t.trade_id} ${t.side} ${t.instrument}`).join(" · ");
+      else if (e.tool === "impact_read") r = `${j.trade_id} → net impact on ${j.book}: $${(j.net_mv_impact / 1e6).toFixed(2)}M · owner: ${j.owner}`;
+      else if (e.tool === "risk_read") r = `${j.scope}: gross $${(j.gross_mv / 1e6).toFixed(1)}M`;
+    } catch (x) {}
+    return "Returned: " + esc(r).slice(0, 260) + (e.other_desk ? ` <b style="color:var(--deny)">⚠ ${esc(e.other_desk)}</b>` : "");
   }
+  const VERD = { allow: "ALLOW", deny: "DENY", approval: "HOLD → human", filtered: "ALLOW · FILTERED" };
+
+  // ---------- rulebook ----------
+  const DATA_TXT = { "D:firm": ["firm-wide / cross-desk totals", { allow: ["open (weak)", "weak"], approval: ["human approval", "approval"], deny: ["deny", "deny"] }],
+    "D:wildcard": ["“all books” requests", { passthrough: ["unchecked (weak)", "weak"], expand: ["own books only", "allow"] }],
+    "D:free_text": ["notes on other-desk rows", { keep: ["shown (weak)", "weak"], drop: ["withheld", "allow"] }] };
+  function renderRules() {
+    const P = SETUP().principal || {};
+    document.getElementById("vtag").textContent = S.version ? "v" + S.version : "no rules";
+    const fired = new Set(String(S.fired || "").split(" + ").map(x => x.trim()).filter(Boolean));
+    const row = (id, label, val, cls) => `<div class="rr ${fired.has(id) ? "fired" : ""} ${S.changed.has(id) ? "changed" : ""}"><span>${label}<span class="id">${esc(id)}</span></span><span class="eff ${cls}">${esc(val)}</span></div>`;
+    document.getElementById("rbE").innerHTML = row("E:" + (P.id || "") + ".books", esc(P.name || "trader") + ": books", (P.books || []).join(", "), "allow") + row("E:" + (P.id || "") + ".desks", "desks", (P.desks || []).join(", ") + " only", "allow")
+      + row("default", "anything not listed", "deny", "deny");
+    document.getElementById("rbM").innerHTML = S.rules.length ? S.rules.map(r => row("M:" + r.agent + "." + r.tool, esc(short(r.agent)) + " · " + esc(LABEL[r.tool] || r.tool), r.effect === "approval" ? "human" : r.effect, r.effect)).join("")
+      : `<p class="empty">None yet: every agent call is denied.</p>`;
+    const d = S.data || (SETUP().data_policy || {});
+    document.getElementById("rbD").innerHTML = Object.entries(DATA_TXT).map(([id, [l, m]]) => { const v = d[id.slice(2)]; const [t, c] = (m[v] || [v, ""]); return row(id, l, t, c); }).join("")
+      + row("D:foreign_rows", "other-desk rows in own book", "client, size, price, desk withheld", "allow");
+    const g = Object.values(S.grants).map(x => `<div class="rr ${fired.has(x.id) ? "fired" : ""}"><span>${esc(x.id)} · ${esc(short(x.agent))} · ${esc(LABEL[x.tool] || x.tool)}<span class="id">${esc(x.form || "")}</span></span><span class="eff ${x.live ? "grant" : "off"}">${x.live ? x.ttl_min + " min · live" : "expired"}</span></div>`);
+    S.iso.forEach(a => g.push(`<div class="rr"><span>${esc(short(a))} isolated</span><span class="eff deny">no calls</span></div>`));
+    document.getElementById("rbG").innerHTML = g.join("") || `<p class="sub" style="font-size:.72rem">None.</p>`;
+  }
+  const LOOP = ["Incident / finding", "Governance proposes", "Compliance reviews", "Rule live", "Same attack re-run"];
+  function renderLoop() { document.getElementById("loop").innerHTML = LOOP.map((l, i) => `<div class="${S.loop === i + 1 ? "on" : ""}"><b>${i + 1}</b>${l}</div>`).join("");
+    document.getElementById("plog").innerHTML = S.props.slice().reverse().map(p => `<div><span class="st" style="color:${p.status === "approved" ? "var(--allow)" : p.status === "rejected" ? "var(--deny)" : "var(--hold)"}">${esc(p.id)} · ${esc(p.status)}${p.by ? " by " + esc(p.by) : ""}</span><br>${esc(p.diff.map(x => x.id + ": " + x.from + " → " + x.to).join("; "))}${p.reason ? `<br><span class="sub" style="font-size:.7rem">${esc(p.reason)}</span>` : ""}</div>`).join(""); }
   function scoreboard(s) {
-    document.getElementById("score").innerHTML = [
-      ["other-desk data shown to the trader", s.other_desk_data_shown_in_main_story, s.other_desk_data_shown_in_main_story === 0 ? "good" : "bad"],
-      ["writes to prices or bookings", s.writes_executed, s.writes_executed === 0 ? "good" : "bad"],
-      ["control gaps found & closed", s.gaps_found, ""], ["gaps left open", s.gaps_open_after_fix, s.gaps_open_after_fix === 0 ? "good" : "bad"],
-      ["agents isolated", s.isolations, ""], ["rulebook versions", s.versions, ""],
-    ].map(([k, v, c]) => `<div class="tile"><div class="v ${c}">${v}</div><div class="k">${k}</div></div>`).join("");
-    document.getElementById("scorenote").textContent = `Gate decisions: ${s.allowed} allowed, ${s.filtered} filtered, ${s.denied} denied, ${s.held} held for a human. Exceptions granted: ${s.grants}. Breaks to Middle Office: ${s.breaks_raised}.`;
+    if (!s) { document.getElementById("score").innerHTML = ""; return; }
+    document.getElementById("score").innerHTML = [["other-desk data in the trader's final answer", s.final_answer_leaks, s.final_answer_leaks ? "bad" : "good"], ["leaks caught by the Gate's detector", s.exposure_alerts, ""], ["writes to prices or bookings", s.writes_executed, s.writes_executed ? "bad" : "good"],
+      ["gaps confirmed by the Auditor", s.findings_confirmed, ""], ["fixes holding on re-test", s.retests_held + "/" + (s.retests_held + s.retests_open), s.retests_open ? "bad" : "good"], ["rule changes approved / rejected", s.approved + "/" + s.rejected, ""]]
+      .map(([l, n, c]) => `<div class="tile"><div class="n ${c}">${n}</div><div class="l">${l}</div></div>`).join("");
+    document.getElementById("scorenote").textContent = `Gate: ${s.allowed} allowed, ${s.filtered} filtered, ${s.denied} denied, ${s.held} held. Exceptions granted: ${s.grants}. Agents isolated: ${s.isolations}. Auditor probes: ${s.probes}. Breaks to Middle Office: ${s.breaks_raised}. ${s.calls} model calls, about ₹${s.cost_inr}.`;
   }
-  function renderAnswer(a) {
-    document.getElementById("ans").innerHTML = `<div class="k s">Explained to ${esc(NAME.kenji)}</div><ul>${a.seen.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
-      + `<div class="k w">Withheld, and why</div><ul>${a.withheld.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
-  }
-  async function gateFlash(e) {
-    gate.classList.remove("allow", "deny", "hold", "filt");
-    const cls = { allow: "allow", deny: "deny", approval: "hold", filtered: "filt" }[e.decision]; gate.classList.add(cls);
-    document.getElementById("gchain").textContent = chainText(e.chain);
-    document.getElementById("gdec").textContent = { allow: "ALLOW", deny: "DENY", approval: "HOLD → human", filtered: "ALLOW · FILTERED" }[e.decision];
-    await sleep(650);
-  }
-  const roomFlash = (room, c) => { const el = document.getElementById("room-" + room) || document.getElementById("desk-" + room); if (!el) return; el.classList.add("flash-" + c); setTimeout(() => el.classList.remove("flash-" + c), 950 * speed); };
+  function renderAnswer(a) { document.getElementById("ans").innerHTML = `<h3>What the trader gets${a.rerun ? " · same question, after the fix" : ""}</h3>`
+    + (a.leaks ? `<p style="color:var(--deny);font-size:.82rem">⚠ This answer was built on a response that carried another desk's data (${a.leaks}). The Gate's detector raised an alert.</p>` : "")
+    + (a.text ? `<p style="font-size:.86rem;border-left:3px solid var(--orchestrator);padding-left:8px">${esc(a.text).slice(0, 700)}</p>` : "")
+    + `<div class="k" style="color:var(--allow)">Explained (checked against the Gate log)</div><ul>${a.seen.map(x => `<li>${esc(x)}</li>`).join("") || "<li>nothing</li>"}</ul>`
+    + `<div class="k" style="color:var(--filt)">Withheld or denied, and why</div><ul>${a.withheld.map(x => `<li>${esc(x)}</li>`).join("") || "<li>nothing</li>"}</ul>`
+    + (a.complete ? "" : `<p class="sub" style="color:var(--hold)">In this run the explanation was incomplete. That's real agent behaviour, shown as it happened.</p>`); }
+  function showDef(id) {
+    const d = (SETUP().agents || {})[id], P = SETUP().principal || {};
+    let h;
+    if (id === "kenji") h = `<h3>${esc(P.name)} (human)</h3><p class="row">${esc(P.role)}. Entitled to books ${esc((P.books || []).join(", "))}, desks ${esc((P.desks || []).join(", "))}. Asks one question; every agent call carries his identity.</p>`;
+    else if (!d) h = "<p>No definition loaded yet.</p>";
+    else { const allowed = S.rules.filter(r => r.agent === id).map(r => r.tool + " (" + r.effect + ")");
+      h = `<h3>${esc(d.name)}</h3><p class="row"><b>Kind:</b> ${d.kind === "worker" ? "working agent" : "control agent"}${d.stand_in_for ? " · stand-in for " + esc(d.stand_in_for) : ""} · <b>max steps:</b> ${d.max_steps}</p>
+        <p class="row"><b>Mandate:</b> ${esc(d.mandate)}</p><p class="row"><b>Tools it can see:</b> ${esc(d.tools.join(", "))}</p>
+        ${d.kind === "worker" ? `<p class="row"><b>Allowed by the current rulebook:</b> ${esc(allowed.join(", ") || "nothing yet")}</p>` : ""}
+        <p class="row"><b>System prompt</b> (from agents/${esc(id)}.json):</p><pre>${esc(d.system_prompt)}</pre>`; }
+    document.getElementById("dlgBody").innerHTML = h; document.getElementById("dlg").showModal(); }
+  document.getElementById("dlgClose").onclick = () => document.getElementById("dlg").close();
 
-  async function doGateway(e) {
-    const actor = e.agent, room = TOOLROOM[e.tool], who = NAME.kenji.split(" ")[0];
-    if (e.tool === "ask_agent") { const callee = (e.args && e.args.agent) || "";
-      cap(`Orchestrator asks the ${esc(NAME[callee] || callee)}`, `“${esc((e.args && e.args.request) || "")}”. The request carries <b>${esc(who)}</b>'s identity.`);
-      if (bots[callee]) moveBot(actor, { x: (HOME[callee].x + HOME.orchestrator.x) / 2, y: HOME[callee].y - 8 }); await sleep(900); moveBot(actor, HOME[actor]); return; }
-    if (bots[actor]) badge(actor, "for " + who);
-    cap(`${esc(NAME[actor] || actor)} → ${esc(LABEL[e.tool] || e.tool)}`, `<b>${esc(chainText(e.chain))}</b> approaches the Gate${room ? ` for <b>${esc(DESKS[room] ? DESKS[room].n : room)}</b>` : ""}.`);
-    moveBot(actor, { x: GATE.x, y: GATE.y + 14 }); await sleep(750); await gateFlash(e);
-    if (e.decision === "allow" || e.decision === "filtered") {
-      if (room) { moveBot(actor, pos(room)); roomFlash(room, e.decision === "filtered" ? "filt" : "allow"); await sleep(750); }
-      cap(e.decision === "filtered" ? "Allowed, filtered" : "Allowed",
-        e.decision === "filtered" ? `${esc(e.reason)}. The row stays visible so ${esc(who)} knows it exists; the client, size, price and owning desk are withheld.`
-          : `${esc(LABEL[e.tool] || e.tool)}: within the agent's mandate <i>and</i> ${esc(who)}'s entitlement.${e.reason ? " " + esc(e.reason) + "." : ""}`);
-      await sleep(e.decision === "filtered" ? 1500 : 600);
-    } else if (e.decision === "approval") { cap("Held for a human", `${esc(e.reason)}. Nothing is executed until a person approves.`); await sleep(1100); }
-    else { if (room) roomFlash(room, "deny"); cap("Denied at the Gate", esc(e.reason) + "."); await sleep(1200); }
-    moveBot(actor, HOME[actor]); badge(actor, null);
-    gate.classList.remove("allow", "deny", "hold", "filt"); document.getElementById("gdec").textContent = ""; document.getElementById("gchain").textContent = ""; await sleep(400);
+  // ---------- event player ----------
+  async function gateway(e) {
+    const a = e.agent, z = TOOLZONE[e.tool], who = short(e.chain[0]);
+    if (e.tool === "ask_agent") { const c = e.args.agent; tag(a, "→ " + short(c)); card("", `${esc(short(a))} → ${esc(short(c))} · for ${esc(who)}`, "“" + esc(e.args.request || "") + "”");
+      cap(`${short(a)} asks the ${NAME(c)}`, `Delegation carries ${esc(who)}'s identity, so the specialist gets only what ${esc(who)} may see.`);
+      if (HOME[c]) move(a, { x: (HOME[c].x + HOME[a].x) / 2, y: (HOME[c].y + HOME[a].y) / 2 }); await sleep(1100); tag(a, ""); home(a); return; }
+    tag(a, (LABEL[e.tool] || e.tool) + (e.args && (e.args.scope || e.args.book || e.args.instrument) ? " · " + (e.args.scope || e.args.book || e.args.instrument) : ""));
+    card("", `${esc(e.chain.map(short).join(" → "))}`, `${esc(short(a))} wants to <b>${esc(LABEL[e.tool] || e.tool)}</b> <span class="sub">(${esc(argsTxt(e.args))})</span>`);
+    cap(`${NAME(a)} → ${LABEL[e.tool] || e.tool}`, `On behalf of <b>${esc(NAME(e.chain[0]))}</b>. The Gate checks the agent's mandate and ${esc(who)}'s entitlement.`);
+    move(a, { x: 50, y: 50 }); await sleep(900);
+    gate.className = "gate " + e.decision; S.fired = e.rule_id; renderRules();
+    card(e.decision, `${esc(e.chain.map(short).join(" → "))} · <span class="v ${e.decision}">${VERD[e.decision]}</span> · rule ${esc(e.rule_id || "")}`, `${esc(short(a))} · ${esc(LABEL[e.tool] || e.tool)} <span class="sub">(${esc(argsTxt(e.args))})</span>`, resultTxt(e));
+    if ((e.decision === "allow" || e.decision === "filtered") && z) { move(a, { x: ZONES[z].x, y: ZONES[z].y + 13 }); flash(z, e.decision); }
+    else if (z) flash(z, e.decision);
+    cap({ allow: "Allowed", filtered: "Allowed, filtered", deny: "Denied at the Gate", approval: "Held for a human" }[e.decision] + ` · rule ${e.rule_id || ""}`,
+      e.decision === "filtered" ? "Another desk's row sits in his book. It stays visible so he knows it exists; the client, size, price and owning desk are withheld." : e.decision === "deny" ? esc(e.reason) + "." : e.decision === "approval" ? esc(e.reason) + ". Nothing runs until a person approves." : "Within the agent's mandate and the trader's entitlement.");
+    await sleep(e.decision === "allow" ? 1500 : 2300);
+    gate.className = "gate"; S.fired = null; renderRules(); tag(a, ""); home(a); await sleep(350);
   }
-
   async function apply(e) {
     switch (e.kind) {
-      case "scene": sceneChip(e.n, e.title); life(e.lifecycle); cap(e.title, esc(e.subtitle) + (e.owasp ? ` <span style="font-family:var(--f-mono);font-size:.75rem">· OWASP Agentic ${esc(e.owasp)}</span>` : "")); await sleep(2000); return;
-      case "ruleversion": renderRules(e); if (e.version > 1) { const c = document.getElementById("desk-comp"); c.classList.add("stamp"); setTimeout(() => c.classList.remove("stamp"), 1300 * speed);
-          cap("Compliance approves v" + e.version, "Governance drafted the fix; a human signed it off; the Gate enforces it from now on: " + esc(e.change) + "."); await sleep(1500); } return;
-      case "ask": bubble("kenji", e.text); cap(`${esc(NAME.kenji)} asks`, "“" + esc(e.text) + "”"); await sleep(1600); return;
-      case "message": { const c = e.chain || []; if (c.length === 2) bubble("orchestrator", e.text); else if (c.length > 2) bubble(e.to, e.text); await sleep(700); return; }
-      case "say": bubble(e.agent, e.text); await sleep(800); return;
-      case "gateway": await doGateway(e); return;
+      case "setup": renderRules(); return;
+      case "scene": hideCard(); document.querySelectorAll(".chap").forEach(c => c.classList.toggle("on", +c.dataset.n === e.n)); lifeOn(e.lifecycle); banner(e.test ? "LABELLED TEST · agents set to assume-compromised" : "");
+        cap(`Scene ${e.n} · ${e.title}`, esc(e.subtitle) + (e.owasp ? ` <span style="font:.74rem var(--fm)">· OWASP Agentic ${esc(e.owasp)}</span>` : "")); card("", "Scene " + e.n, esc(e.title), esc(e.subtitle)); await sleep(2600); hideCard(); return;
+      case "ask": say("kenji", e.text); tag("kenji", "asks one question"); card("", esc(NAME("kenji")) + " → Orchestrator", "“" + esc(e.text) + "”", "Nothing else is scripted from here."); await sleep(2200); tag("kenji", ""); return;
+      case "message": if (e.to === "orchestrator" && e.from === "injected note") { say("orchestrator", e.text); card("deny", "Injected instruction (test)", esc(e.text).slice(0, 220)); await sleep(2000); }
+        else if (e.to === "orchestrator" && e.from === "auditor") { say("auditor", e.text); tag("auditor", "probing as the trader"); card("ctl", "Auditor → Orchestrator (as " + esc(short("kenji")) + ", sandbox)", "“" + esc(e.text).slice(0, 240) + "”"); await sleep(1800); tag("auditor", ""); }
+        else if (e.to === "compliance") { tag("compliance", "reviewing"); await sleep(300); }
+        else if (e.chain.length > 2) { say(e.to, e.text); await sleep(600); }
+        return;
+      case "say": say(e.agent, e.text); await sleep(e.agent === "orchestrator" || bots[e.agent] && ["governance", "auditor", "compliance"].includes(e.agent) ? 1400 : 700); return;
+      case "gateway": await gateway(e); return;
+      case "wake": bots[e.agent] && bots[e.agent].classList.add("awake"); tag(e.agent, e.trigger); card("ctl", NAME(e.agent) + " wakes", esc(e.trigger)); cap(`${NAME(e.agent)} wakes`, "Trigger: " + esc(e.trigger) + ". Control agents only run when something needs them."); await sleep(1400); return;
+      case "act": tag(e.agent, LABEL[e.tool] || e.tool); card("ctl", NAME(e.agent), esc(LABEL[e.tool] || e.tool) + (argsTxt(e.args) ? ` <span class="sub">(${esc(argsTxt(e.args))})</span>` : "")); await sleep(900); return;
+      case "proposal": S.props.push({ id: e.id, diff: e.diff, status: "pending", rationale: e.rationale }); S.loop = 2; renderLoop(); tag("governance", "proposes " + e.id);
+        move("governance", { x: 50, y: 30 }); card("ctl", "Governance proposes " + esc(e.id) + " · pending Compliance", esc(e.diff.map(x => x.id + ": " + x.from + " → " + x.to).join(" · ")), esc(e.rationale));
+        cap("Governance proposes a rule change", "A proposal, not a change. Nothing is live until Compliance approves."); await sleep(2400); home("governance"); return;
+      case "review": { const p = S.props.find(x => x.id === e.id); if (p) { p.status = e.decision === "approve" ? "approved" : "rejected"; p.by = e.by; p.reason = e.reason; } S.loop = 3; renderLoop();
+        tag("compliance", e.decision === "approve" ? "APPROVED" : "REJECTED"); card(e.decision === "approve" ? "allow" : "deny", "Compliance · " + esc(e.by), `<span class="v ${e.decision === "approve" ? "allow" : "deny"}">${e.decision === "approve" ? "APPROVED" : "REJECTED"}</span> ${esc(e.id)}`, esc(e.reason));
+        cap("Compliance " + (e.decision === "approve" ? "approves " : "rejects ") + e.id, esc(e.reason)); await sleep(2200); tag("compliance", ""); bots.compliance.classList.remove("awake"); return; }
+      case "ruleversion": { const before = new Map(S.rules.map(r => ["M:" + r.agent + "." + r.tool, r.effect])), bd = S.data || {};
+        S.rules = e.rules; S.data = e.data; S.version = e.version; S.changed = new Set(); S.rules.forEach(r => { const id = "M:" + r.agent + "." + r.tool; if (before.get(id) !== r.effect) S.changed.add(id); });
+        Object.keys(e.data || {}).forEach(k => { if (bd[k] !== undefined && bd[k] !== e.data[k]) S.changed.add("D:" + k); }); if (e.version > 1) S.loop = 4; renderRules(); renderLoop();
+        card("allow", "Rule live · v" + e.version, esc(e.change), "Approved by " + esc(e.approver || "")); cap("Rulebook v" + e.version + " is live", "The Gate enforces it from the next call: " + esc(e.change)); await sleep(2200); S.changed = new Set(); renderRules(); return; }
       case "govern":
-        if (e.action === "grant") { badge(e.agent, e.ttl_min + "m · totals only"); const g = document.getElementById("desk-gov"); g.classList.add("stamp"); setTimeout(() => g.classList.remove("stamp"), 1200 * speed);
-          cap("Governance grants a narrow exception", `The ${esc(NAME[e.agent])} may read <b>aggregate impact only</b> for ${esc(NAME.kenji.split(" ")[0])}, for ${e.ttl_min} minutes. No client, size or desk detail. ${esc(e.reason || "")}`); await sleep(1800); badge(e.agent, null); return; }
-        if (e.action === "isolate") { const b = bots[e.agent]; b.classList.add("ring"); cap("Agent isolated", `Governance isolates the <b>${esc(NAME[e.agent])}</b> after repeated out-of-mandate writes. ${esc(e.reason)}.`);
-          moveBot(e.agent, QUAR); await sleep(1800); b.classList.remove("ring"); moveBot(e.agent, HOME[e.agent]); await sleep(500); return; }
-        cap("Governance refuses", esc(e.reason || "")); await sleep(1000); return;
-      case "answer": renderAnswer(e); cap("The answer, not the data", `${esc(NAME.kenji)} gets a full explanation of his gap. Every withheld item is named, with the reason.`); bubble("orchestrator", e.seen.join(" · ")); await sleep(2600); return;
-      case "round": cap("Audit round " + e.idx, "The Auditor tests: “" + esc(e.objective) + "” Agents are set to assume-compromised."); bubble("auditor", "testing: " + e.objective); await sleep(1500); return;
-      case "assurance": cap(e.phase === "retest" ? "Re-test: " + (e.gap ? "still open" : "held") : "Control test: " + (e.gap ? "gap found" : "held"),
-          e.phase === "retest" ? (e.gap ? "The control is still open." : "The same attack now fails. <b>Held.</b>") : (e.gap ? "The Auditor got through: a control gap. Governance drafts the narrowest fix for Compliance." : "The control held.")); await sleep(1200); return;
-      case "done": scoreboard(e.summary); life(null); cap("Run complete", `No other-desk data reached the trader; no price or booking was changed; ${e.summary.gaps_found} gaps found and closed. ${e.summary.calls} model calls, about ₹${e.summary.cost_inr}.`); return;
+        if (e.action === "grant") { S.grants[e.id] = { id: e.id, agent: e.agent, tool: e.tool, ttl_min: e.ttl_min, form: e.form, live: true }; renderRules(); tag("governance", "grants " + e.id);
+          card("ctl", "Governance grants " + esc(e.id) + " · " + e.ttl_min + " min, task-scoped", `${esc(short(e.agent))} may <b>${esc(LABEL[e.tool] || e.tool)}</b> for ${esc(short(e.principal))}`, esc(e.form) + " " + esc(e.reason)); cap("A narrow, temporary exception", "Granted from a fixed catalogue of narrow forms; expires with the task."); await sleep(2600); bots.governance.classList.remove("awake"); tag("governance", ""); return; }
+        if (e.action === "expire") { if (S.grants[e.id]) S.grants[e.id].live = false; renderRules(); card("", "Grant " + esc(e.id) + " expired", "Task finished: access withdrawn automatically."); await sleep(1100); return; }
+        if (e.action === "refuse") { card("deny", "Governance refuses", esc(e.reason)); await sleep(1800); bots.governance.classList.remove("awake"); tag("governance", ""); return; }
+        if (e.action === "isolate") { S.iso.add(e.agent); bots[e.agent] && bots[e.agent].classList.add("iso"); home(e.agent); renderRules(); card("deny", "Governance isolates the " + esc(NAME(e.agent)), esc(e.reason)); cap("Agent isolated", esc(e.reason)); await sleep(2600); bots.governance.classList.remove("awake"); tag("governance", ""); return; }
+        if (e.action === "no_action") { card("ctl", "Governance: no action", esc(e.reason)); await sleep(1800); bots.governance.classList.remove("awake"); tag("governance", ""); return; }
+        return;
+      case "alert": S.loop = 1; renderLoop(); card("deny", e.type === "exposure" ? "Data-exposure alert → Governance" : "Incident alert → Governance", esc(e.text), "Gate events: " + esc((e.events || []).map(n => "#" + n).join(", ")));
+        cap(e.type === "exposure" ? "Another desk's data reached the trader" : "Incident alert", e.type === "exposure" ? "The Gate's code detector caught it (like a data-loss-prevention control) and wakes Governance. This is the loop starting from a real incident." : "Any attempted write by an agent, or repeated attempts to read another desk, wakes Governance."); await sleep(2600); return;
+      case "human": S.iso.forEach(a => bots[a] && bots[a].classList.remove("iso")); S.iso.clear(); ["orchestrator", "trade", "market", "position", "risk"].forEach(home); renderRules(); card("", "Human step", esc(e.text)); await sleep(2000); return;
+      case "probe": tag("auditor", "probe " + e.n); return;
+      case "nudge": card("ctl", NAME(e.agent) + ": decision required", "The harness requires every control task to end in a decision. The choice is the agent's."); await sleep(900); return;
+      case "finding": S.loop = e.confirmed ? 1 : S.loop; renderLoop(); tag("auditor", e.confirmed ? "gap confirmed" : "not confirmed");
+        card(e.confirmed ? "deny" : "", "Auditor reports: " + esc(e.title), e.confirmed ? "Confirmed by code: " + esc(e.verified_by_code.join("; ")) : "Not confirmed: no Gate event showed other-desk data.", esc(e.evidence)); await sleep(2600); tag("auditor", ""); return;
+      case "retest": S.loop = 5; renderLoop(); card("ctl", "Re-test: same attack, new rules", "“" + esc(e.text).slice(0, 200) + "”"); await sleep(1600); return;
+      case "retest_result": card(e.held ? "allow" : "deny", "Re-test · " + esc(e.of), e.held ? "HELD: the same attack no longer gets through." : "STILL OPEN"); cap("Re-test " + (e.held ? "held" : "still open"), esc(e.of)); await sleep(2200); S.loop = 0; renderLoop(); return;
+      case "audit_done": bots.auditor.classList.remove("awake"); card("ctl", "Auditor finishes", esc(e.summary)); await sleep(1800); return;
+      case "answer": renderAnswer(e); say("orchestrator", e.text || ""); card("", "Answer to " + esc(NAME("kenji")), esc((e.seen || []).join(" · ")), (e.withheld || []).length ? "Withheld: " + esc(e.withheld.length + " item(s), each named with the reason (see below)") : ""); cap("The answer, not the data", "Built from what the Gate let through; every withheld item named."); await sleep(3200); return;
+      case "done": scoreboard(e.summary); lifeOn(null); banner(""); card("", "Run complete", "", ""); cap("Run complete", "Everything above was decided by the agents and enforced by the Gate in one recorded run."); return;
     }
   }
-  async function playOne() { if (ptr >= E.length) { stop(); return; } busy = true; try { await apply(E[ptr]); } finally { ptr++; busy = false; } }
-  async function loop() { while (timer && ptr < E.length) await playOne(); if (ptr >= E.length) stop(); }
+  async function playOne() { if (ptr >= E.length) return false; busy = true; try { await apply(E[ptr]); } finally { ptr++; busy = false; } return true; }
+  async function loop() { while (timer) { if (ptr >= E.length) { if (LIVE && !E.some(e => e.kind === "done")) { await new Promise(r => setTimeout(r, 300)); continue; } break; } await playOne(); } stopP(); }
   function play() { if (timer) return; timer = true; document.getElementById("play").textContent = "⏸ Pause"; loop(); }
-  function stop() { timer = null; document.getElementById("play").textContent = ptr >= E.length ? "▶ Replay" : "▶ Play"; }
-  function toggle() { if (timer) stop(); else { if (ptr >= E.length) restart(); play(); } }
-  function restart() { stop(); ptr = 0; prevRules = null;
-    for (const k in bots) { moveBot(k, HOME[k]); bots[k].classList.remove("hasbadge", "ring", "talk"); }
-    const v1 = E.find(e => e.kind === "ruleversion"); if (v1) renderRules(v1);
-    const P = R.principal || {}; document.getElementById("who").innerHTML = `Trader: <b>${esc(P.name)}</b>, ${esc(P.role)}. Entitled to book ${esc((P.books || []).join(", "))} only.`;
-    const done = E.find(e => e.kind === "done"); if (done) scoreboard(done.summary);
-    document.getElementById("ans").innerHTML = '<p class="vnote">Appears when the Orchestrator answers.</p>'; life(null);
-    sceneChip(0, "Ready"); cap("Ready", "Press Play to watch the floor. Step goes one decision at a time."); document.getElementById("play").textContent = "▶ Play"; }
-  document.getElementById("play").onclick = toggle;
-  document.getElementById("step").onclick = async () => { if (busy) return; stop(); await playOne(); };
-  document.getElementById("restart").onclick = restart;
+  function stopP() { timer = false; document.getElementById("play").textContent = ptr >= E.length ? "▶ Replay" : "▶ Play"; }
+  function reset() { stopP(); ptr = 0; resetState(); hideCard(); banner(""); gate.className = "gate";
+    for (const k in bots) { bots[k].classList.remove("busy", "talk", "iso", "awake"); tag(k, ""); move(k, HOME[k]); }
+    renderRules(); renderLoop(); scoreboard(null); document.getElementById("ans").innerHTML = '<h3>What the trader gets</h3><p class="sub">Appears when the Orchestrator answers.</p>'; lifeOn(null);
+    cap("Ready", "Press Play. Use the scene buttons to jump."); if (E[0] && E[0].kind === "setup") { apply(E[0]); ptr = 1; } }
+  async function jump(n) { stopP(); reset(); const target = E.findIndex(e => e.kind === "scene" && e.n === n); if (target < 0) return;
+    instant = true; stage.classList.add("instant"); while (ptr < target) await playOne(); instant = false; requestAnimationFrame(() => stage.classList.remove("instant")); play(); }
+  function chapters() { document.getElementById("chaps").innerHTML = E.filter(e => e.kind === "scene").map(e => `<button class="chap" data-n="${e.n}">${e.n} · ${esc(e.title)}</button>`).join("");
+    document.querySelectorAll(".chap").forEach(b => b.onclick = () => jump(+b.dataset.n)); }
+  document.getElementById("play").onclick = () => { if (timer) stopP(); else { if (ptr >= E.length) reset(); play(); } };
+  document.getElementById("step").onclick = async () => { if (busy) return; stopP(); await playOne(); };
+  document.getElementById("restart").onclick = reset;
   document.querySelectorAll(".speed button").forEach(b => b.onclick = () => { speed = +b.dataset.s; document.querySelectorAll(".speed button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); });
-  const s = R.summary, d = new Date(s.run_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-  document.getElementById("foot").textContent = `Recorded run ${d} IST · ${s.model} via Straive LLM Foundry · ${s.calls} model calls · about ₹${s.cost_inr} · replayed step by step. The Gate is plain code and the 5 working agents are real LLM agents. In this version the trader's requests are scripted per scene, Governance and the Auditor are single LLM calls, and Compliance approval is automatic.`;
-  restart();
+  function footer() { const s = (E.find(e => e.kind === "done") || {}).summary; if (!s) { document.getElementById("foot").textContent = LIVE ? "Live run in progress." : ""; return; }
+    const d = new Date(s.run_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+    document.getElementById("foot").textContent = `${LIVE ? "Live run" : "Recorded run"} ${d} IST · ${s.model} via Straive LLM Foundry · ${s.calls} model calls · about ₹${s.cost_inr}.`; }
+  window.__FLOOR = { E, chapters, footer, reset, play, isLive: LIVE };
+  if (!LIVE) { chapters(); footer(); reset(); }
 })();
-</script></body></html>
+</script>
+<script src="live.js"></script>
+</body></html>

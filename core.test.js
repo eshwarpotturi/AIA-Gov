@@ -73,3 +73,17 @@ t("main story (default detail): no client name anywhere in the filtered read", (
   const { gw, e } = setup(); const out = gw.call(K("trade"), "trade_read", { book: "JGB-1" }); assert.ok(!/Hokkaido/.test(out)); assert.ok(!e[0].leaked);
 });
 console.log(n + " tests passed");
+// ---- v3 additions
+{ const C = require("./core.js"), assert = require("assert");
+  const s = C.freshState(), r = C.baselineRules(), e = [], gw = C.makeGateway(s, r, [], e);
+  gw.call(["kenji","orchestrator","risk"], "risk_read", { scope: "desk:CREDIT" }); assert.strictEqual(e[0].rule_id, "E:kenji.desks");
+  gw.call(["kenji","orchestrator","risk"], "risk_read", { scope: "firm" }); assert.ok(e[1].other_desk);
+  gw.call(["kenji","orchestrator","position"], "position_read", { book: "all" }); assert.ok(e[2].other_desk);
+  gw.call(["kenji","orchestrator","trade"], "trade_read", { book: "JGB-1" }); assert.ok(!e[3].other_desk); assert.ok(/D:foreign_rows/.test(e[3].rule_id));
+  const c = C.applyChange(r, [{ op: "set_data_policy", key: "firm", value: "approval" }, { op: "set_agent_rule", agent: "position", tool: "impact_read", effect: "allow" }]);
+  assert.ok(c.ok); assert.strictEqual(c.diff.length, 2); assert.strictEqual(c.rules.data.firm, "approval"); assert.strictEqual(r.data.firm, "allow");
+  assert.ok(!C.applyChange(r, [{ op: "set_data_policy", key: "firm", value: "yes" }]).ok);
+  assert.ok(!C.applyChange(r, [{ op: "set_data_policy", key: "firm", value: "allow" }]).ok, "no-op change must be rejected");
+  assert.ok(!C.applyChange(r, [{ op: "set_agent_rule", agent: "x", tool: "trade_read", effect: "allow" }]).ok);
+  const em = C.emptyRules(); const s2 = C.freshState(), e2 = []; C.makeGateway(s2, em, [], e2).call(["kenji","orchestrator","trade"], "trade_read", { book: "JGB-1" }); assert.strictEqual(e2[0].decision, "deny");
+  console.log("  ok  v3: rule ids, other-desk detector, applyChange validation, empty mandates deny"); }
