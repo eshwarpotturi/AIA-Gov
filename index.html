@@ -62,6 +62,14 @@ h1{font-family:var(--fd);font-size:clamp(1.4rem,2.6vw,2rem);margin:0;line-height
 .bot.busy .tag{opacity:1}
 .bot .say{position:absolute;top:calc(100% + 2px);left:50%;transform:translateX(-50%);width:200px;font-size:.66rem;line-height:1.3;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:5px 8px;text-align:left;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
 .bot.talk .say{opacity:1}
+.bot.talk{z-index:30}
+.bot .say{width:280px;font-size:.76rem;line-height:1.38;border-color:var(--c);box-shadow:0 6px 18px rgba(0,0,0,.55);max-height:9.5em;overflow:auto}
+.bot.edge-l .say{left:0;transform:none}.bot.edge-r .say{left:auto;right:0;transform:none}
+.bot.low .say{top:auto;bottom:calc(100% + 4px)}
+.feed{display:grid;gap:4px;max-height:260px;overflow:auto;font-size:.8rem;scroll-behavior:smooth}
+.feed div{border-left:4px solid var(--c);background:var(--floor);border-radius:0 6px 6px 0;padding:4px 8px}
+.feed b{font:600 .7rem var(--fm);color:var(--c)}.feed .to{color:var(--muted);font:.66rem var(--fm)}
+.feed div.now{outline:1px solid var(--c)}
 .bot.iso .body{box-shadow:0 0 0 3px var(--deny),0 0 18px var(--deny-soft)}.bot.awake .body{box-shadow:0 0 0 3px var(--c),0 0 20px var(--c)}
 .banner{position:absolute;left:50%;bottom:2%;transform:translateX(-50%);font:600 .78rem var(--fm);background:var(--hold-soft);color:var(--hold);border:1px solid var(--hold);border-radius:8px;padding:4px 10px;opacity:0;transition:opacity .25s;z-index:9;white-space:nowrap}
 .banner.show{opacity:1}
@@ -114,6 +122,7 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
       <div class="stage" id="stage"><div class="act" id="act"><div class="w" id="actW"></div><div class="t" id="actT"></div><div class="r" id="actR"></div></div><div class="banner" id="banner"></div></div>
       <div class="legend"><span><i style="background:var(--allow)"></i>allowed</span><span><i style="background:var(--filt)"></i>allowed, filtered</span><span><i style="background:var(--deny)"></i>denied</span><span><i style="background:var(--hold)"></i>held for a human</span><span><i style="background:var(--gov)"></i>governance / control agents</span><span>· click an agent for its prompt, tools and mandate</span></div>
       <div class="cap"><div class="ct" id="capT">Ready</div><div class="cd" id="capD">Press Play. Use the scene buttons to jump.</div></div>
+      <div class="card"><div class="vh"><h3>Conversation</h3><span class="sub" style="font-size:.7rem">every message, newest at the bottom</span></div><div class="feed" id="feed"></div></div>
       <div class="card ans" id="ans"><h3>What the trader gets</h3><p class="sub">Appears when the Orchestrator answers.</p></div>
     </div>
     <div class="col">
@@ -172,7 +181,15 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
   const move = (id, p) => { const b = bots[id]; if (b && p) { b.style.left = p.x + "%"; b.style.top = p.y + "%"; } };
   const home = id => move(id, S.iso.has(id) ? ISO : HOME[id]);
   const tag = (id, t) => { const b = bots[id]; if (!b) return; b.querySelector(".tag").textContent = t || ""; b.classList.toggle("busy", !!t); };
-  function say(id, t) { const b = bots[id]; if (!b || instant) return; b.querySelector(".say").textContent = t.length > 160 ? t.slice(0, 158) + "…" : t; b.classList.add("talk"); clearTimeout(b._t); b._t = setTimeout(() => b.classList.remove("talk"), 3200 * speed); }
+  const EDGE = { governance: "edge-l", auditor: "edge-l low", compliance: "edge-r", trade: "edge-l", risk: "edge-r", kenji: "low", market: "low", position: "low" };
+  function feed(id, t, to) { const f = document.getElementById("feed"); f.querySelectorAll(".now").forEach(x => x.classList.remove("now"));
+    const d = document.createElement("div"); d.className = "now"; d.style.setProperty("--c", `var(--${id === "kenji" ? "human" : id})`);
+    d.innerHTML = `<b>${esc(short(id))}</b>${to ? ` <span class="to">→ ${esc(short(to))}</span>` : ""}<br>${esc(t)}`; f.appendChild(d); if (!instant) f.scrollTop = f.scrollHeight; }
+  function say(id, t, to) { if (!t) return; feed(id, t, to); const b = bots[id]; if (!b || instant) return;
+    for (const k in bots) if (k !== id) bots[k].classList.remove("talk");
+    (EDGE[id] || "").split(" ").filter(Boolean).forEach(c => b.classList.add(c));
+    b.querySelector(".say").textContent = t.length > 420 ? t.slice(0, 418) + "…" : t; b.classList.add("talk"); }
+  const readTime = t => Math.min(7000, 1400 + String(t || "").length * 28);
   const cap = (t, d) => { document.getElementById("capT").textContent = t; document.getElementById("capD").innerHTML = d; };
   function card(cls, w, t, r) { if (instant) return; const a = document.getElementById("act"); a.className = "act show " + (cls || ""); document.getElementById("actW").innerHTML = w; document.getElementById("actT").innerHTML = t; document.getElementById("actR").innerHTML = r || ""; }
   const hideCard = () => document.getElementById("act").classList.remove("show");
@@ -259,21 +276,21 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
     else if (z) flash(z, e.decision);
     cap({ allow: "Allowed", filtered: "Allowed, filtered", deny: "Denied at the Gate", approval: "Held for a human" }[e.decision] + ` · rule ${e.rule_id || ""}`,
       e.decision === "filtered" ? "Another desk's row sits in his book. It stays visible so he knows it exists; the client, size, price and owning desk are withheld." : e.decision === "deny" ? esc(e.reason) + "." : e.decision === "approval" ? esc(e.reason) + ". Nothing runs until a person approves." : "Within the agent's mandate and the trader's entitlement.");
-    await sleep(e.decision === "allow" ? 1500 : 2300);
+    await sleep(e.decision === "allow" ? 2200 : 3200);
     gate.className = "gate"; S.fired = null; renderRules(); tag(a, ""); home(a); await sleep(350);
   }
   async function apply(e) {
     switch (e.kind) {
       case "setup": renderRules(); return;
-      case "scene": hideCard(); document.querySelectorAll(".chap").forEach(c => c.classList.toggle("on", +c.dataset.n === e.n)); lifeOn(e.lifecycle); banner(e.test ? "LABELLED TEST · agents set to assume-compromised" : "");
+      case "scene": hideCard(); for (const k in bots) bots[k].classList.remove("talk"); document.querySelectorAll(".chap").forEach(c => c.classList.toggle("on", +c.dataset.n === e.n)); lifeOn(e.lifecycle); banner(e.test ? "LABELLED TEST · agents set to assume-compromised" : "");
         cap(`Scene ${e.n} · ${e.title}`, esc(e.subtitle) + (e.owasp ? ` <span style="font:.74rem var(--fm)">· OWASP Agentic ${esc(e.owasp)}</span>` : "")); card("", "Scene " + e.n, esc(e.title), esc(e.subtitle)); await sleep(2600); hideCard(); return;
-      case "ask": say("kenji", e.text); tag("kenji", "asks one question"); card("", esc(NAME("kenji")) + " → Orchestrator", "“" + esc(e.text) + "”", "Nothing else is scripted from here."); await sleep(2200); tag("kenji", ""); return;
-      case "message": if (e.to === "orchestrator" && e.from === "injected note") { say("orchestrator", e.text); card("deny", "Injected instruction (test)", esc(e.text).slice(0, 220)); await sleep(2000); }
-        else if (e.to === "orchestrator" && e.from === "auditor") { say("auditor", e.text); tag("auditor", "probing as the trader"); card("ctl", "Auditor → Orchestrator (as " + esc(short("kenji")) + ", sandbox)", "“" + esc(e.text).slice(0, 240) + "”"); await sleep(1800); tag("auditor", ""); }
+      case "ask": say("kenji", e.text, "orchestrator"); tag("kenji", "asks one question"); card("", esc(NAME("kenji")) + " → Orchestrator", "“" + esc(e.text) + "”", "Nothing else is scripted from here."); await sleep(2200); tag("kenji", ""); return;
+      case "message": if (e.to === "orchestrator" && e.from === "injected note") { feed("orchestrator", "[injected note] " + e.text); card("deny", "Injected instruction (test)", esc(e.text).slice(0, 220)); await sleep(2000); }
+        else if (e.to === "orchestrator" && e.from === "auditor") { say("auditor", e.text, "orchestrator"); tag("auditor", "probing as the trader"); card("ctl", "Auditor → Orchestrator (as " + esc(short("kenji")) + ", sandbox)", "“" + esc(e.text).slice(0, 240) + "”"); await sleep(1800); tag("auditor", ""); }
         else if (e.to === "compliance") { tag("compliance", "reviewing"); await sleep(300); }
-        else if (e.chain.length > 2) { say(e.to, e.text); await sleep(600); }
+        else if (e.chain.length > 2) { say(e.chain[e.chain.length - 2], e.text, e.to); await sleep(readTime(e.text) * .6); }
         return;
-      case "say": say(e.agent, e.text); await sleep(e.agent === "orchestrator" || bots[e.agent] && ["governance", "auditor", "compliance"].includes(e.agent) ? 1400 : 700); return;
+      case "say": say(e.agent, e.text); await sleep(readTime(e.text)); return;
       case "gateway": await gateway(e); return;
       case "wake": bots[e.agent] && bots[e.agent].classList.add("awake"); tag(e.agent, e.trigger); card("ctl", NAME(e.agent) + " wakes", esc(e.trigger)); cap(`${NAME(e.agent)} wakes`, "Trigger: " + esc(e.trigger) + ". Control agents only run when something needs them."); await sleep(1400); return;
       case "act": tag(e.agent, LABEL[e.tool] || e.tool); card("ctl", NAME(e.agent), esc(LABEL[e.tool] || e.tool) + (argsTxt(e.args) ? ` <span class="sub">(${esc(argsTxt(e.args))})</span>` : "")); await sleep(900); return;
@@ -315,7 +332,7 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
   function stopP() { timer = false; document.getElementById("play").textContent = ptr >= E.length ? "▶ Replay" : "▶ Play"; }
   function reset() { stopP(); ptr = 0; resetState(); hideCard(); banner(""); gate.className = "gate";
     for (const k in bots) { bots[k].classList.remove("busy", "talk", "iso", "awake"); tag(k, ""); move(k, HOME[k]); }
-    renderRules(); renderLoop(); scoreboard(null); document.getElementById("ans").innerHTML = '<h3>What the trader gets</h3><p class="sub">Appears when the Orchestrator answers.</p>'; lifeOn(null);
+    document.getElementById("feed").innerHTML = ""; renderRules(); renderLoop(); scoreboard(null); document.getElementById("ans").innerHTML = '<h3>What the trader gets</h3><p class="sub">Appears when the Orchestrator answers.</p>'; lifeOn(null);
     cap("Ready", "Press Play. Use the scene buttons to jump."); if (E[0] && E[0].kind === "setup") { apply(E[0]); ptr = 1; } }
   async function jump(n) { stopP(); reset(); const target = E.findIndex(e => e.kind === "scene" && e.n === n); if (target < 0) return;
     instant = true; stage.classList.add("instant"); while (ptr < target) await playOne(); instant = false; requestAnimationFrame(() => stage.classList.remove("instant")); play(); }
