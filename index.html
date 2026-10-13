@@ -39,10 +39,10 @@ h1{font-family:var(--fd);font-size:clamp(1.4rem,2.6vw,2rem);margin:0;line-height
 .zone{position:absolute;transform:translate(-50%,-50%);text-align:center;border-radius:9px;padding:6px 8px;width:15%;background:var(--panel);border:1px solid var(--line)}
 .zone .n{font:700 .82rem/1.05 var(--fd)}.zone .d{font:.6rem/1.2 var(--fm);color:var(--muted);margin-top:2px}
 .zone .step{position:absolute;top:-9px;left:-7px;font:.58rem var(--fm);background:var(--accent);color:#0b1020;border-radius:999px;padding:0 5px}
-.zone.human{background:#23262d;border-color:#737c8c}.zone.ctl{border-style:dashed;border-color:var(--gov);background:var(--gov-soft)}
+.zone.human{background:var(--humanbg);border-color:#737c8c}.zone.ctl{border-style:dashed;border-color:var(--gov);background:var(--gov-soft)}
 .zone.iso{border-style:dashed;border-color:var(--deny);background:transparent}.zone.iso .n{color:var(--deny)}
 .zone.f-allow{box-shadow:0 0 0 2px var(--allow),0 0 22px var(--allow-soft)}.zone.f-deny{box-shadow:0 0 0 2px var(--deny),0 0 22px var(--deny-soft)}.zone.f-filtered{box-shadow:0 0 0 2px var(--filt),0 0 22px var(--filt-soft)}.zone.f-approval{box-shadow:0 0 0 2px var(--hold)}
-.gate{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);width:22%;text-align:center;border-radius:12px;padding:8px;background:var(--accent-soft);border:2px solid var(--accent);z-index:3}
+.gate{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%);width:17%;text-align:center;border-radius:12px;padding:8px;background:var(--accent-soft);border:2px solid var(--accent);z-index:3}
 .gate .n{font:700 .95rem var(--fd)}.gate .gv{font:600 .66rem/1.3 var(--fm);margin-top:3px;min-height:1.3em}.gate .d{font:.6rem var(--fm);color:var(--muted)}
 .gate.allow{border-color:var(--allow);background:var(--allow-soft)}.gate.deny{border-color:var(--deny);background:var(--deny-soft)}.gate.approval{border-color:var(--hold);background:var(--hold-soft)}.gate.filtered{border-color:var(--filt);background:var(--filt-soft)}
 /* action card: what is happening, on the floor */
@@ -62,7 +62,7 @@ h1{font-family:var(--fd);font-size:clamp(1.4rem,2.6vw,2rem);margin:0;line-height
 .bot.busy .tag{opacity:1}
 .bot .say{position:absolute;top:calc(100% + 2px);left:50%;transform:translateX(-50%);width:200px;font-size:.66rem;line-height:1.3;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:5px 8px;text-align:left;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
 .bot.talk .say{opacity:1}
-.bot.talk{z-index:30}.bot.busy{z-index:25}
+.bot.talk{z-index:30}.bot.busy{z-index:40}
 .zone,.gate{cursor:pointer}.gate{z-index:6}
 .bot .say{width:280px;font-size:.76rem;line-height:1.38;border-color:var(--c);box-shadow:0 6px 18px rgba(0,0,0,.55);max-height:9.5em;overflow:auto}
 .bot.edge-l .say{left:0;transform:none}.bot.edge-r .say{left:auto;right:0;transform:none}
@@ -135,7 +135,7 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
     <button class="btn" id="play">▶ Play</button><button class="btn g" id="step">Step ▸</button><button class="btn g" id="restart">↺ Restart</button>
     <div class="chaps" id="chaps"></div>
     <div class="speed">speed <button data-s="1.5" aria-pressed="false">0.7×</button><button data-s="1" aria-pressed="true">1×</button><button data-s="0.5" aria-pressed="false">2×</button><button data-s="0.25" aria-pressed="false">4×</button></div>
-    <span class="live" id="livebadge"></span>
+    <button class="btn g" id="theme" aria-label="Switch light or dark mode">☀ Light</button><span class="live" id="livebadge"></span>
   </div>
   <div class="main">
     <div class="col">
@@ -170,12 +170,12 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
   const ZONES = {
     Trades: { x: 13, y: 9, d: "trade capture", s: 4 }, "Market Data": { x: 32, y: 9, d: "internal price feed", s: 2 }, Positions: { x: 51, y: 9, d: "holdings · P&L", s: 7 }, Risk: { x: 70, y: 9, d: "exposure · limits", s: 5 },
     "Middle Office": { x: 89, y: 9, d: "human · breaks", c: "human" },
-    Governance: { x: 9, y: 33, d: "the checker", c: "ctl" }, Auditor: { x: 9, y: 66, d: "control testing", c: "ctl" }, Compliance: { x: 91, y: 33, d: "approves rule changes", c: "ctl" }, Isolation: { x: 91, y: 66, d: "pending human review", c: "iso" },
+    Governance: { x: 9, y: 43, d: "the checker", c: "ctl" }, Auditor: { x: 9, y: 71, d: "control testing", c: "ctl" }, Compliance: { x: 91, y: 40, d: "approves rule changes", c: "ctl" }, Isolation: { x: 91, y: 71, d: "pending human review", c: "iso" },
   };
   const TOOLZONE = { trade_read: "Trades", trade_amend: "Trades", marketdata_read: "Market Data", marketdata_set: "Market Data", position_read: "Positions", impact_read: "Positions", risk_read: "Risk", break_raise: "Middle Office" };
-  const HOME = { orchestrator: { x: 50, y: 62 }, trade: { x: 24, y: 58 }, market: { x: 36, y: 74 }, position: { x: 64, y: 74 }, risk: { x: 76, y: 58 }, kenji: { x: 50, y: 88 },
-                 governance: { x: 9, y: 47 }, auditor: { x: 9, y: 80 }, compliance: { x: 91, y: 47 } };
-  const ISO = { x: 91, y: 80 };
+  const HOME = { orchestrator: { x: 50, y: 68 }, trade: { x: 20, y: 58 }, market: { x: 34, y: 84 }, position: { x: 66, y: 84 }, risk: { x: 80, y: 58 }, kenji: { x: 50, y: 90 },
+                 governance: { x: 9, y: 62 }, auditor: { x: 9, y: 90 }, compliance: { x: 91, y: 60 } };
+  const ISO = { x: 91, y: 90 };
   const LABEL = { trade_read: "read trades", trade_amend: "move a booked trade", marketdata_read: "read a price", marketdata_set: "overwrite a price", position_read: "read positions", impact_read: "read a trade's net impact", risk_read: "read exposure", break_raise: "raise a break", ask_agent: "ask a specialist", request_access: "ask Governance for an exception",
     read_tool_catalog: "read the tool catalog", read_rulebook: "read the rulebook", read_gate_log: "read the Gate log", read_grant_catalog: "read the grant catalog", read_policy: "read the written policy" };
   const stage = document.getElementById("stage");
@@ -198,6 +198,10 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
   let speed = 1, ptr = 0, timer = false, busy = false, instant = false;
   const sleep = ms => instant ? Promise.resolve() : new Promise(r => setTimeout(r, ms * speed));
   const pos = k => ZONES[k] || HOME[k];
+  // lanes computed from measured boxes: agent 9.2% x 8.5%, tag 15.7% wide; Gate x 41.5-58.5; control desks x<=16.5 / >=83.5
+  const LANE = { trade: 22, market: 33, position: 67, risk: 75, orchestrator: 67 };
+  async function walkUp(a, y) { const h0 = HOME[a]; if (!h0) return; const lx = LANE[a] || h0.x; move(a, { x: lx, y: h0.y }); await sleep(650); move(a, { x: lx, y }); await sleep(800); }
+  async function walkHome(a, y) { const h0 = HOME[a]; if (!h0) return; const lx = LANE[a] || h0.x; move(a, { x: lx, y }); await sleep(700); move(a, { x: lx, y: h0.y }); await sleep(650); home(a); }
   const move = (id, p) => { const b = bots[id]; if (b && p) { b.style.left = p.x + "%"; b.style.top = p.y + "%"; } };
   const home = id => move(id, S.iso.has(id) ? ISO : HOME[id]);
   const tag = (id, t) => { const b = bots[id]; if (!b) return; b.querySelector(".tag").textContent = t || ""; b.classList.toggle("busy", !!t); };
@@ -340,21 +344,22 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
     const a = e.agent, z = TOOLZONE[e.tool], who = short(e.chain[0]);
     if (e.tool === "ask_agent") { const c = e.args.agent; tag(a, "→ " + short(c)); card("", `${esc(short(a))} → ${esc(short(c))} · for ${esc(who)}`, "“" + esc(e.args.request || "") + "”");
       cap(`${short(a)} asks the ${NAME(c)}`, `Delegation carries ${esc(who)}'s identity, so the specialist gets only what ${esc(who)} may see.`);
-      if (HOME[c]) move(a, { x: (HOME[c].x + HOME[a].x) / 2, y: (HOME[c].y + HOME[a].y) / 2 }); await sleep(1100); tag(a, ""); home(a); return; }
+      await sleep(1100); tag(a, ""); return; }
     tag(a, (LABEL[e.tool] || e.tool) + (e.args && (e.args.scope || e.args.book || e.args.instrument) ? " · " + (e.args.scope || e.args.book || e.args.instrument) : ""));
     card("", `${esc(e.chain.map(short).join(" → "))}`, `${esc(short(a))} wants to <b>${esc(LABEL[e.tool] || e.tool)}</b> <span class="sub">(${esc(argsTxt(e.args))})</span>`);
     cap(`${NAME(a)} → ${LABEL[e.tool] || e.tool}`, `On behalf of <b>${esc(NAME(e.chain[0]))}</b>. The Gate checks the agent's mandate and ${esc(who)}'s entitlement.`);
-    move(a, { x: 33, y: 44 }); await sleep(900);
+    await walkUp(a, 31);
     gate.className = "gate " + e.decision; S.fired = e.rule_id; renderRules();
     document.getElementById("gv").innerHTML = `<span class="v ${e.decision}">${VERD[e.decision]}</span><br>${esc(e.rule_id || "")}`;
     gateFeed(e);
     card(e.decision, `${esc(e.chain.map(short).join(" → "))} · <span class="v ${e.decision}">${VERD[e.decision]}</span> · rule ${esc(e.rule_id || "")}`, `${esc(short(a))} · ${esc(LABEL[e.tool] || e.tool)} <span class="sub">(${esc(argsTxt(e.args))})</span>`, resultTxt(e));
-    if ((e.decision === "allow" || e.decision === "filtered") && z) { move(a, { x: ZONES[z].x, y: ZONES[z].y + 19 }); flash(z, e.decision); }
+    if ((e.decision === "allow" || e.decision === "filtered") && z) { move(a, { x: ZONES[z].x, y: ZONES[z].y + 16 }); flash(z, e.decision); }
     else if (z) flash(z, e.decision);
     cap({ allow: "Allowed", filtered: "Allowed, filtered", deny: "Denied at the Gate", approval: "Held for a human" }[e.decision] + ` · rule ${e.rule_id || ""}`,
       e.decision === "filtered" ? "Another desk's row sits in his book. It stays visible so he knows it exists; the client, size, price and owning desk are withheld." : e.decision === "deny" ? esc(e.reason) + "." : e.decision === "approval" ? esc(e.reason) + ". Nothing runs until a person approves." : "Within the agent's mandate and the trader's entitlement.");
     await sleep(e.decision === "allow" ? 2200 : 3200);
-    gate.className = "gate"; document.getElementById("gv").innerHTML = ""; S.fired = null; renderRules(); tag(a, ""); home(a); await sleep(350);
+    gate.className = "gate"; document.getElementById("gv").innerHTML = ""; S.fired = null; renderRules(); tag(a, "");
+    await walkHome(a, 31); await sleep(200);
   }
   async function apply(e) {
     switch (e.kind) {
@@ -374,7 +379,7 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
       case "wake": bots[e.agent] && bots[e.agent].classList.add("awake"); tag(e.agent, e.trigger); card("ctl", NAME(e.agent) + " wakes", esc(e.trigger)); cap(`${NAME(e.agent)} wakes`, "Trigger: " + esc(e.trigger) + ". Control agents only run when something needs them."); await sleep(1400); return;
       case "act": tag(e.agent, LABEL[e.tool] || e.tool); card("ctl", NAME(e.agent), esc(LABEL[e.tool] || e.tool) + (argsTxt(e.args) ? ` <span class="sub">(${esc(argsTxt(e.args))})</span>` : "")); await sleep(900); return;
       case "proposal": S.props.push({ id: e.id, diff: e.diff, status: "pending", rationale: e.rationale }); S.loop = 2; renderLoop(); tag("governance", "proposes " + e.id);
-        move("governance", { x: 50, y: 30 }); card("ctl", "Governance proposes " + esc(e.id) + " · pending Compliance", esc(e.diff.map(x => x.id + ": " + x.from + " → " + x.to).join(" · ")), esc(e.rationale));
+        move("governance", { x: 22, y: 42 }); card("ctl", "Governance proposes " + esc(e.id) + " · pending Compliance", esc(e.diff.map(x => x.id + ": " + x.from + " → " + x.to).join(" · ")), esc(e.rationale));
         cap("Governance proposes a rule change", "A proposal, not a change. Nothing is live until Compliance approves."); await sleep(2400); home("governance"); return;
       case "review": { const p = S.props.find(x => x.id === e.id); if (p) { p.status = e.decision === "approve" ? "approved" : "rejected"; p.by = e.by; p.reason = e.reason; } S.loop = 3; renderLoop();
         tag("compliance", e.decision === "approve" ? "APPROVED" : "REJECTED"); card(e.decision === "approve" ? "allow" : "deny", "Compliance · " + esc(e.by), `<span class="v ${e.decision === "approve" ? "allow" : "deny"}">${e.decision === "approve" ? "APPROVED" : "REJECTED"}</span> ${esc(e.id)}`, esc(e.reason));
@@ -421,6 +426,11 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
   document.getElementById("play").onclick = () => { if (timer) stopP(); else { if (ptr >= E.length) reset(); play(); } };
   document.getElementById("step").onclick = async () => { if (busy) return; stopP(); await playOne(); };
   document.getElementById("restart").onclick = reset;
+  const themeBtn = document.getElementById("theme");
+  const setTheme = t => { document.documentElement.setAttribute("data-theme", t); themeBtn.textContent = t === "light" ? "☾ Dark" : "☀ Light"; try { localStorage.setItem("aiagov-theme", t); } catch (x) {} };
+  let saved = null; try { saved = localStorage.getItem("aiagov-theme"); } catch (x) {}
+  setTheme(saved || "dark");
+  themeBtn.onclick = () => setTheme(document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light");
   document.querySelectorAll(".speed button").forEach(b => b.onclick = () => { speed = +b.dataset.s; document.querySelectorAll(".speed button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); });
   function footer() { scoreboard((E.find(e => e.kind === "done") || {}).summary || null); const s = (E.find(e => e.kind === "done") || {}).summary; if (!s) { document.getElementById("foot").textContent = LIVE ? "Live run in progress." : ""; return; }
     const d = new Date(s.run_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });

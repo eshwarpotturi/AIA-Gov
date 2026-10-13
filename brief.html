@@ -2,6 +2,7 @@
 <title>Agent Entitlements Brief</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Sans+Condensed:wght@700&family=IBM+Plex+Mono&display=swap">
 <style>
+:root[data-theme=light]{--bg:#f4f6fb;--panel:#fff;--ink:#121a2c;--muted:#56637b;--line:#d3dbe8;--accent:#3554d9;--allow:#0f8a52;--deny:#c62f3a;--hold:#a46a00;--filt:#0a74b8;--gov:#8a3fc1;color-scheme:light}
 :root{--bg:#0e1420;--panel:#151d2b;--ink:#e9edf5;--muted:#9aa6ba;--line:#2a3748;--accent:#6b8afd;--allow:#52d39a;--deny:#ff7a7a;--hold:#f2c45a;--filt:#62c6ff;--gov:#c58be8;color-scheme:dark}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "IBM Plex Sans",system-ui,sans-serif}
 .w{max-width:980px;margin:0 auto;padding:24px 16px 48px;display:grid;gap:22px}
@@ -19,7 +20,7 @@ ul{margin:0;padding-left:20px;display:grid;gap:4px}
 .k{font:12px "IBM Plex Mono",monospace}.a{color:var(--allow)}.d{color:var(--deny)}.h{color:var(--hold)}.f{color:var(--filt)}
 a{color:var(--accent)}
 </style></head><body><div class="w">
-<header style="display:grid;gap:8px"><div class="eb">Straive Innovation · AI agent entitlements · architecture brief</div>
+<header style="display:grid;gap:8px"><button id="theme" style="justify-self:end;cursor:pointer;background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:7px;padding:5px 12px;font:600 .85rem system-ui">☀ Light</button><div class="eb">Straive Innovation · AI agent entitlements · architecture brief</div>
 <h1>Maker-checker for AI agent permissions</h1>
 <p class="one">AI proposes, Compliance approves, code enforces, and every attack makes the rules stronger.</p>
 <p class="m">Live demo: <a href="./index.html">the $2M question, replayed</a>.</p></header>
@@ -71,4 +72,4 @@ a{color:var(--accent)}
 <li>The default page is a replay of one recorded real run (GPT-4.1-mini via Straive LLM Foundry); the same floor also runs live on a laptop.</li>
 <li>All eight agents are real (system prompt, tools, tool-calling loop; definitions in agents/*.json). Scripted: the trader's one question, the labelled injected-instruction test, and the triggers that wake control agents. The Compliance agent stands in for a human; in live mode a person approves.</li>
 </ul></section>
-</div></body></html>
+</div><script>(()=>{const b=document.getElementById("theme");const s=t=>{document.documentElement.setAttribute("data-theme",t);b.textContent=t==="light"?"☾ Dark":"☀ Light";try{localStorage.setItem("aiagov-theme",t)}catch(x){}};let v=null;try{v=localStorage.getItem("aiagov-theme")}catch(x){}s(v||"dark");b.onclick=()=>s(document.documentElement.getAttribute("data-theme")==="light"?"dark":"light")})();</script></body></html>
