@@ -73,6 +73,8 @@ header{display:grid;gap:6px}
 .bot.ring .body{box-shadow:0 0 0 3px var(--deny),0 0 16px var(--deny-soft)}
 .bot .bubble{position:absolute;bottom:calc(var(--bw) + 6px);left:50%;transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-size:.66rem;width:170px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9;text-align:left}
 .bot.talk .bubble{opacity:1}
+.bot.orchestrator .bubble{bottom:auto;top:50%;left:calc(100% + 4px);transform:translateY(-50%)}
+.bot.auditor .bubble{left:0;transform:none}
 .caption{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:0 10px 10px 0;padding:11px 14px;min-height:70px;display:grid;gap:3px}
 .caption .ct{font-family:var(--f-display);font-weight:700;font-size:1.08rem} .caption .cd{color:var(--muted);font-size:.92rem}
 .legend{display:flex;flex-wrap:wrap;gap:5px 12px;font-size:.74rem;color:var(--muted)}
@@ -145,10 +147,10 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
   const LIFE = ["Client request", "Pricing & quote", "Execution", "Booking & validation", "Risk & compliance", "Confirmation & settlement", "Reconciliation & reporting"];
   document.getElementById("life").innerHTML = LIFE.map((l, i) => `<div id="life-${i + 1}"><b>${i + 1}</b>${l}</div>`).join("");
   const ROOMS = { Trades: { x: 14, y: 12, d: "trade capture", s: 4 }, "Market Data": { x: 38, y: 12, d: "internal price feed", s: 2 }, Positions: { x: 62, y: 12, d: "holdings · P&L", s: 7 }, Risk: { x: 86, y: 12, d: "exposure · limits", s: 5 } };
-  const DESKS = { gov: { x: 11, y: 42, n: "Governance", d: "exceptions only", c: "gov" }, aud: { x: 11, y: 70, n: "Auditor", d: "control testing", c: "aud" },
+  const DESKS = { gov: { x: 11, y: 42, n: "Governance", d: "exceptions only", c: "gov" }, aud: { x: 11, y: 68, n: "Auditor", d: "control testing", c: "aud" },
                   mo: { x: 89, y: 42, n: "Middle Office", d: "human · breaks", c: "human" }, comp: { x: 89, y: 70, n: "Compliance", d: "human sign-off", c: "human" } };
   const GATE = { x: 50, y: 40 };
-  const HOME = { trade: { x: 28, y: 64 }, market: { x: 40, y: 72 }, position: { x: 60, y: 72 }, risk: { x: 72, y: 64 }, orchestrator: { x: 50, y: 62 }, kenji: { x: 50, y: 88 }, auditor: { x: 11, y: 70 } };
+  const HOME = { trade: { x: 28, y: 64 }, market: { x: 40, y: 72 }, position: { x: 60, y: 72 }, risk: { x: 72, y: 64 }, orchestrator: { x: 50, y: 62 }, kenji: { x: 50, y: 88 }, auditor: { x: 11, y: 86 } };
   const QUAR = { x: 76, y: 90 };
   const TOOLROOM = { trade_read: "Trades", trade_amend: "Trades", marketdata_read: "Market Data", marketdata_set: "Market Data", position_read: "Positions", impact_read: "Positions", risk_read: "Risk", break_raise: "mo" };
   const LABEL = { trade_read: "read trades", trade_amend: "amend a booked trade", marketdata_read: "read price", marketdata_set: "overwrite a price", position_read: "read positions", impact_read: "read net impact (aggregate)", risk_read: "read exposure", break_raise: "raise a break to Middle Office", ask_agent: "ask a specialist", request_access: "request an exception" };
