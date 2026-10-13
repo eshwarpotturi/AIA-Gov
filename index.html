@@ -372,8 +372,8 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
   async function apply(e) {
     switch (e.kind) {
       case "setup": renderRules(); return;
-      case "scene": for (const k in bots) bots[k].classList.remove("talk"); document.querySelectorAll(".chap").forEach(c => c.classList.toggle("on", +c.dataset.n === e.n)); lifeOn(e.lifecycle); banner(e.test ? "LABELLED TEST · agents set to assume-compromised" : "");
-        cap(`Scene ${e.n} · ${e.title}`, esc(e.subtitle) + (e.owasp ? ` <span style="font:.74rem var(--fm)">· OWASP Agentic ${esc(e.owasp)}</span>` : "")); card("", "Scene " + e.n + (e.test ? " · labelled test" : ""), esc(e.title), esc(e.subtitle)); await sleep(3000); return;
+      case "scene": for (const k in bots) bots[k].classList.remove("talk"); document.querySelectorAll(".chap").forEach(c => c.classList.toggle("on", +c.dataset.n === e.n)); lifeOn(e.lifecycle); banner(e.test ? "ATTACK TEST: we have hijacked the agents on purpose to prove the Gate still holds" : "");
+        cap(`Scene ${e.n} · ${e.title}`, esc(e.subtitle) + (e.owasp ? ` <span style="font:.74rem var(--fm)">· OWASP Agentic ${esc(e.owasp)}</span>` : "")); card("", "Scene " + e.n + (e.test ? " · attack test" : ""), esc(e.title), esc(e.subtitle)); await sleep(3000); return;
       case "ask": say("kenji", e.text, "orchestrator"); tag("kenji", "asks one question"); card("", esc(NAME("kenji")) + " → Orchestrator", "“" + esc(e.text) + "”", "Nothing else is scripted from here."); await sleep(2200); tag("kenji", ""); return;
       case "message": if (e.to === "orchestrator" && e.from === "injected note") { feed("orchestrator", "[injected note] " + e.text); card("deny", "Injected instruction (test)", esc(e.text).slice(0, 220)); await sleep(2000); }
         else if (e.to === "orchestrator" && e.from === "auditor") { say("auditor", e.text, "orchestrator"); tag("auditor", "probing as the trader"); card("ctl", "Auditor → Orchestrator (as " + esc(short("kenji")) + ", sandbox)", "“" + esc(e.text).slice(0, 240) + "”"); await sleep(1800); tag("auditor", ""); }
