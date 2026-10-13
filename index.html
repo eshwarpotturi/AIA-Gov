@@ -8,7 +8,11 @@
 --accent:#6b8afd;--accent-soft:#1d2a4c;--gov:#c58be8;--gov-soft:#2b2040;--human:#f2f2f2;
 --allow:#52d39a;--allow-soft:#10331f;--deny:#ff7a7a;--deny-soft:#3a1517;--hold:#f2c45a;--hold-soft:#352a10;--filt:#62c6ff;--filt-soft:#0f2f48;
 --orchestrator:#6b8afd;--trade:#52c0d3;--position:#e0a85a;--market:#8fd16a;--risk:#f08aa8;--governance:#c58be8;--auditor:#b0a4ff;--compliance:#e9e3c9;
---fd:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;--fb:"IBM Plex Sans",system-ui,"Segoe UI",sans-serif;--fm:"IBM Plex Mono",ui-monospace,Consolas,monospace;color-scheme:dark}
+--fd:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;--fb:"IBM Plex Sans",system-ui,"Segoe UI",sans-serif;--fm:"IBM Plex Mono",ui-monospace,Consolas,monospace;color-scheme:dark;--humanbg:#23262d}
+:root[data-theme=light]{--bg:#f4f6fb;--panel:#ffffff;--floor:#eaeff7;--floor2:#dde5f1;--ink:#121a2c;--muted:#56637b;--line:#d3dbe8;
+--accent:#3554d9;--accent-soft:#e3e9ff;--gov:#8a3fc1;--gov-soft:#f2e8fb;--human:#3f4a5c;--humanbg:#eef1f6;
+--allow:#0f8a52;--allow-soft:#dcf4e8;--deny:#c62f3a;--deny-soft:#fde4e6;--hold:#a46a00;--hold-soft:#fff1d6;--filt:#0a74b8;--filt-soft:#ddefff;
+--orchestrator:#4a6cf0;--trade:#1f9eb3;--position:#d08a2e;--market:#5aa83a;--risk:#d9567d;--governance:#a35ad4;--auditor:#7f6ee6;--compliance:#9c8f5a;color-scheme:light}
 *{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--fb)}
 .wrap{max-width:1500px;margin:0 auto;padding:16px 16px 40px;display:grid;gap:12px}
 h1{font-family:var(--fd);font-size:clamp(1.4rem,2.6vw,2rem);margin:0;line-height:1.1}h3{font-family:var(--fd);margin:0;font-size:1rem}p{margin:0}
@@ -56,6 +60,10 @@ h1{font-family:var(--fd);font-size:clamp(1.4rem,2.6vw,2rem);margin:0;line-height
 .bot .body{width:var(--bw);height:calc(var(--bw)*.78);margin:0 auto;border-radius:12px;position:relative;display:grid;place-items:center;box-shadow:0 4px 10px rgba(0,0,0,.4);background:var(--c)}
 .bot .body::after{content:"";position:absolute;width:56%;height:22%;border-radius:4px;background:rgba(255,255,255,.88)}
 .bot .eyes{position:absolute;width:34%;display:flex;justify-content:space-between;z-index:1}.bot .eyes i{width:6px;height:6px;border-radius:50%;background:#0b1020}
+:root[data-theme=light] .bot.human .nm, :root[data-theme=light] .bot .nm{color:var(--ink)}
+:root[data-theme=light] .bot.human .tag{color:#fff}
+:root[data-theme=light] .btn:not(.g), :root[data-theme=light] .speed button[aria-pressed=true], :root[data-theme=light] .zone .step, :root[data-theme=light] .vtag{color:#fff}
+:root[data-theme=light] .bot .body::after{background:rgba(255,255,255,.95)}
 .bot.human .body{border-radius:50% 50% 14px 14px}.bot.human .body::after{display:none}
 .bot .nm{font:600 var(--bf) var(--fm);margin-top:3px;white-space:nowrap}
 .bot .tag{position:absolute;bottom:100%;margin-bottom:5px;z-index:4;box-shadow:0 2px 6px rgba(0,0,0,.5);left:50%;transform:translateX(-50%);font:.62rem/1.25 var(--fm);background:var(--c);color:#0b1020;border-radius:6px;padding:2px 7px;white-space:nowrap;max-width:220px;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .2s}
@@ -101,7 +109,7 @@ h1{font-family:var(--fd);font-size:clamp(1.4rem,2.6vw,2rem);margin:0;line-height
 .rr .id{color:var(--muted);font-size:.62rem;display:block}
 .rr.fired{outline:2px solid var(--accent);background:var(--accent-soft)}.rr.changed{outline:1px solid var(--gov);background:var(--gov-soft)}
 .eff{font-size:.64rem;padding:1px 6px;border-radius:4px;white-space:nowrap}
-.eff.allow{background:var(--allow-soft);color:var(--allow)}.eff.deny{background:var(--deny-soft);color:var(--deny)}.eff.approval{background:var(--hold-soft);color:var(--hold)}.eff.weak{background:var(--hold-soft);color:var(--hold)}.eff.grant{background:var(--gov-soft);color:var(--gov)}.eff.off{background:#222;color:var(--muted)}
+.eff.allow{background:var(--allow-soft);color:var(--allow)}.eff.deny{background:var(--deny-soft);color:var(--deny)}.eff.approval{background:var(--hold-soft);color:var(--hold)}.eff.weak{background:var(--hold-soft);color:var(--hold)}.eff.grant{background:var(--gov-soft);color:var(--gov)}.eff.off{background:var(--floor);color:var(--muted)}
 .empty{font-size:.76rem;color:var(--deny)}
 /* loop */
 .loop{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;position:relative}
@@ -132,7 +140,7 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
   </div>
   <div class="life" id="life"></div>
   <div class="bar">
-    <button class="btn" id="play">▶ Play</button><button class="btn g" id="step">Step ▸</button><button class="btn g" id="restart">↺ Restart</button>
+    <button class="btn" id="play">▶ Play</button><button class="btn g" id="step">Step ▸</button><button class="btn g" id="restart">↺ Restart</button><button class="btn g" id="keym" title="Plays only the key moments; everything else is fast-forwarded">★ Key moments</button>
     <div class="chaps" id="chaps"></div>
     <div class="speed">speed <button data-s="1.5" aria-pressed="false">0.7×</button><button data-s="1" aria-pressed="true">1×</button><button data-s="0.5" aria-pressed="false">2×</button><button data-s="0.25" aria-pressed="false">4×</button></div>
     <button class="btn g" id="theme" aria-label="Switch light or dark mode">☀ Light</button><span class="live" id="livebadge"></span>
@@ -411,7 +419,27 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
       case "done": scoreboard(e.summary); lifeOn(null); banner(""); card("", "Run complete", "", ""); cap("Run complete", "Everything above was decided by the agents and enforced by the Gate in one recorded run."); return;
     }
   }
-  async function playOne() { if (ptr >= E.length) return false; busy = true; try { await apply(E[ptr]); } finally { ptr++; busy = false; } return true; }
+  let PRESENT = false, KEY = null;
+  function keySet() {
+    const k = new Set(); let scene = -1, inRetest = false, firstFilt = false;
+    E.forEach((e, i) => {
+      if (e.kind === "scene") scene = e.n;
+      if (e.kind === "retest") inRetest = true;
+      const key =
+        ["scene", "ask", "proposal", "review", "ruleversion", "answer", "alert", "finding", "retest", "retest_result", "human", "done", "limit"].includes(e.kind)
+        || (e.kind === "govern" && ["grant", "isolate", "refuse"].includes(e.action))
+        || (e.kind === "message" && e.from === "injected note")
+        || (e.kind === "gateway" && e.tool !== "ask_agent" && (e.other_desk || (scene === 2 && e.decision === "deny") || inRetest || (e.decision === "filtered" && !firstFilt && (firstFilt = true))))
+        || (e.kind === "say" && e.agent === "orchestrator" && scene === 1 && E[i + 1] && E[i + 1].kind === "answer");
+      if (e.kind === "retest_result") inRetest = false;
+      if (key) k.add(i);
+    });
+    return k;
+  }
+  async function playOne() { if (ptr >= E.length) return false; busy = true;
+    const skip = PRESENT && KEY && !KEY.has(ptr);
+    try { if (skip) { instant = true; stage.classList.add("instant"); } await apply(E[ptr]); }
+    finally { if (skip) { instant = false; stage.classList.remove("instant"); } ptr++; busy = false; } return true; }
   async function loop() { while (timer) { if (ptr >= E.length) { if (LIVE && !E.some(e => e.kind === "done")) { await new Promise(r => setTimeout(r, 300)); continue; } break; } await playOne(); } stopP(); }
   function play() { if (timer) return; timer = true; document.getElementById("play").textContent = "⏸ Pause"; loop(); }
   function stopP() { timer = false; document.getElementById("play").textContent = ptr >= E.length ? "▶ Replay" : "▶ Play"; }
@@ -425,7 +453,8 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
     document.querySelectorAll(".chap").forEach(b => b.onclick = () => jump(+b.dataset.n)); }
   document.getElementById("play").onclick = () => { if (timer) stopP(); else { if (ptr >= E.length) reset(); play(); } };
   document.getElementById("step").onclick = async () => { if (busy) return; stopP(); await playOne(); };
-  document.getElementById("restart").onclick = reset;
+  document.getElementById("restart").onclick = () => { PRESENT = false; document.getElementById("keym").classList.add("g"); reset(); };
+  document.getElementById("keym").onclick = () => { reset(); PRESENT = true; KEY = keySet(); document.getElementById("keym").classList.remove("g"); play(); };
   const themeBtn = document.getElementById("theme");
   const setTheme = t => { document.documentElement.setAttribute("data-theme", t); themeBtn.textContent = t === "light" ? "☾ Dark" : "☀ Light"; try { localStorage.setItem("aiagov-theme", t); } catch (x) {} };
   let saved = null; try { saved = localStorage.getItem("aiagov-theme"); } catch (x) {}

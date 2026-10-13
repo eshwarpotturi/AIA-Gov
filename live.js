@@ -19,6 +19,7 @@
   es.onmessage = m => { const ev = JSON.parse(m.data);
     if (ev.kind === "review_request") { review(ev); return; }
     if (ev.kind === "error") { badge.textContent = "LIVE · run failed: " + ev.text; return; }
+    if (ev.kind === "setup") F.E.length = 0;   // a new run starts: drop the previous run's events
     F.E.push(ev);
     if (ev.kind === "setup") { F.reset(); F.play(); } if (ev.kind === "scene") F.chapters(); if (ev.kind === "done") { badge.textContent = "LIVE · run complete"; F.footer(); } };
 })();

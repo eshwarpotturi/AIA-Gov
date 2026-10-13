@@ -65,6 +65,19 @@ a{color:var(--accent)}
 <tr><td>Identity vendors (Okta, Ping, SailPoint, Saviynt, Microsoft Entra Agent ID)</td><td>Agent identities and access governance</td><td>Runtime delegation chains, just-in-time narrow grants, and assurance findings turned into live rules: areas a 2026 industry review said none fully covers</td></tr>
 </table></div></section>
 
+<section><h2>What is running, and what production needs</h2>
+<p class="m">The agents and the control logic are real. The bank around them is simulated. This is a working model of the control, not a deployed system.</p>
+<div class="tw"><table>
+<tr><th>Piece</th><th>In this prototype</th><th>In production</th></tr>
+<tr><td>Agents</td><td><b>Real.</b> Each is an LLM (gpt-4.1-mini on Straive LLM Foundry) with its own versioned spec, tools and limits, running a tool-calling loop. Every decision on screen was the model's.</td><td>Same pattern on an agent platform (e.g. LangGraph, AWS Bedrock AgentCore, OpenAI Agents SDK), running persistently and concurrently</td></tr>
+<tr><td>The Gate</td><td><b>Real code</b>, deterministic and unit-tested: agent mandate ∩ human entitlement, default deny, every decision logged with its rule</td><td>A policy engine (e.g. OPA or Cedar) in an API gateway in front of every system</td></tr>
+<tr><td>Bank systems</td><td><b>Simulated</b>: synthetic trades, books, prices and exposures in memory</td><td>The bank's trade capture, positions, market data and risk APIs (or MCP servers)</td></tr>
+<tr><td>Identity</td><td><b>Simulated</b>: the trader is an identity carried through every call chain</td><td>The bank's identity provider (Okta, Entra) with delegated, scoped tokens (OAuth token exchange)</td></tr>
+<tr><td>Runtime</td><td>One process; a full run takes about two minutes and is recorded</td><td>Always-on service with monitoring and alerting</td></tr>
+<tr><td>Audit</td><td>Event log saved with the run</td><td>Immutable audit store retained per regulation</td></tr>
+<tr><td>Human approval</td><td>A Compliance agent stands in; in live mode a person approves on screen</td><td>A person approves every rule change and reviews every isolation</td></tr>
+</table></div></section>
+
 <section><h2>Limits</h2><ul>
 <li>Synthetic data and fictional clients; one trader, two desks, four systems. It demonstrates the method, not coverage of 160+ systems.</li>
 <li>The Auditor runs agents in an explicit “assume compromised” mode, because a control has to hold even when the agent misbehaves.</li>
