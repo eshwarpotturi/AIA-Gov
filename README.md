@@ -8,7 +8,8 @@ A trader on the JGB desk asks: *"Why does my trading desk show a $2 million disc
 - `index.html?live` via `node server.js` — the same floor running live on your PC; `?live&human` makes **you** the Compliance approver
 - `brief.html` — architecture brief
 
-## The agents (all real: system prompt + tools + multi-step tool-calling loop) — `agents/*.json`
+## The agents — `agents/*.json` (versioned specs)
+Each spec has: owner, version/status, risk tier, service account, **delegation graph** (who it may call), **model limits** (temperature, max steps, timeout, ₹ budget per task), tools with purpose / access / **data classification**, requested permissions (granted ones come live from the rulebook), guardrails, escalation, human-in-the-loop points, audit, assurance tests with OWASP + policy mapping, change log. **Enforced at runtime:** delegation graph, temperature, step limit, timeout, budget.
 | Agent | Kind | Tools | Wakes |
 |---|---|---|---|
 | Orchestrator | worker | ask_agent, request_access, break_raise | on the trader's question |
@@ -28,7 +29,7 @@ A trader on the JGB desk asks: *"Why does my trading desk show a $2 million disc
 | 3 | The Auditor probes on its own. Findings are verified by code; confirmed ones go Governance → Compliance → new rule → the same probe re-run | Budget only |
 | 4 | End-of-day review: Governance may propose a permanent narrow rule where routine work needed an exception (rules can be too tight) | Only the trigger |
 
-The answer panel and scoreboard are computed from the Gate log, not written by hand. Results vary between runs: that is real agent behaviour.
+The answer panel and the Run results dashboard (top right) are computed from the event log, not written by hand: outcome, Gate decisions and decision time, fields withheld, least privilege (tools granted vs visible), containment time, finding-to-fix time, Compliance approvals/rejections, cost per question, OWASP risks exercised. Results vary between runs: that is real agent behaviour.
 
 ## Run it
 - `node core.test.js` — Gate unit tests · `node test/dryrun3.js` — full plumbing test with a scripted fake model (not a recording)
@@ -37,3 +38,6 @@ The answer panel and scoreboard are computed from the Gate log, not written by h
 
 ## Limits (say these out loud)
 Synthetic data, fictional clients: one trader, two desks, four systems; it demonstrates the method, not coverage of a 160+ system estate. "Assume compromised" tests are labelled and deliberate: a control must hold even when the agent misbehaves. The Compliance agent stands in for a human approver (in live mode a person approves). The isolation release before the audit is a scripted human step. Control-testing agents add to human penetration testing; they don't replace it. This sits on top of the bank's identity stack (Okta / SailPoint / Entra), not instead of it.
+
+## Folder layout
+One folder. Published: the files above. Kept local and git-ignored: `.foundry-token*`, `tools/` (portable Node), `runs/` (earlier and failed runs), `archive/` (previous versions), `PITCH.md`, `ADITI-INPUTS.md`.

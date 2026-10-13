@@ -1,19 +1,168 @@
 {
+  "spec_version": "1.0",
+  "id": "governance",
   "name": "Governance agent",
+  "version": "1.3.0",
+  "status": "approved",
   "kind": "control",
-  "max_steps": 8,
-  "mandate": "The checker. Wakes only on exceptions: drafts agent mandates, decides narrow temporary grants, isolates agents that exceed their mandate, and proposes rule changes. Can never apply a rule change itself - Compliance must approve.",
+  "description": "The checker. Wakes only on exceptions: drafts agent mandates, decides narrow temporary grants, isolates agents that exceed their mandate, and proposes rule changes. Can never apply a rule change itself - Compliance must approve.",
+  "owner": "Chief Data & AI Office · AI Governance",
+  "approved_by": "AI Governance Board (demo)",
+  "last_review": "2026-10-13",
+  "risk_tier": "Critical",
+  "identity": {
+    "service_account": "svc-ai-governance",
+    "acts_on_behalf_of_human": false,
+    "delegation": {
+      "can_call": [
+        "compliance"
+      ],
+      "callable_by": [
+        "system:gate-alerts",
+        "system:exception-requests",
+        "auditor"
+      ]
+    }
+  },
+  "model": {
+    "provider": "Straive LLM Foundry",
+    "model": "gpt-4.1-mini",
+    "temperature": 0.2,
+    "max_steps": 8,
+    "timeout_s": 120,
+    "budget_inr_per_task": 1.5,
+    "budget_note": "includes the cost of agents it calls"
+  },
   "tools": [
-    "read_tool_catalog",
-    "read_rulebook",
-    "read_gate_log",
-    "read_grant_catalog",
-    "grant",
-    "refuse",
-    "isolate",
-    "no_action",
-    "propose_rule_change"
+    {
+      "name": "read_tool_catalog",
+      "purpose": "List system tools",
+      "system": "Control plane",
+      "access": "control",
+      "data_classification": "internal"
+    },
+    {
+      "name": "read_rulebook",
+      "purpose": "Read the live rulebook",
+      "system": "Control plane",
+      "access": "control",
+      "data_classification": "internal"
+    },
+    {
+      "name": "read_gate_log",
+      "purpose": "Read recent Gate decisions",
+      "system": "Control plane",
+      "access": "control",
+      "data_classification": "internal"
+    },
+    {
+      "name": "read_grant_catalog",
+      "purpose": "List catalogued temporary grants",
+      "system": "Control plane",
+      "access": "control",
+      "data_classification": "internal"
+    },
+    {
+      "name": "grant",
+      "purpose": "Issue a catalogued temporary grant",
+      "system": "Control plane",
+      "access": "control",
+      "data_classification": "internal"
+    },
+    {
+      "name": "refuse",
+      "purpose": "Refuse an exception request",
+      "system": "Control plane",
+      "access": "control",
+      "data_classification": "internal"
+    },
+    {
+      "name": "isolate",
+      "purpose": "Isolate a working agent pending human review",
+      "system": "Control plane",
+      "access": "control",
+      "data_classification": "internal"
+    },
+    {
+      "name": "no_action",
+      "purpose": "Record that no action is needed",
+      "system": "Control plane",
+      "access": "control",
+      "data_classification": "internal"
+    },
+    {
+      "name": "propose_rule_change",
+      "purpose": "Propose a rule change for Compliance review",
+      "system": "Control plane",
+      "access": "control",
+      "data_classification": "internal"
+    }
   ],
-  "system_prompt": "You are the Governance (checker) agent for AI-agent entitlements at a bank. You wake only when called for an exception, an incident, a finding or a review.\nPrinciples: least privilege; a trader must never see another desk's clients, sizes, prices, positions or desk-level exposure; never grant any write to prices or bookings; temporary grants only from the grant catalog, narrowest form, shortest time; isolate an agent that repeatedly tries out-of-mandate actions; rule changes are proposals only - Compliance approves or rejects them.\nRules can also be too tight: if legitimate routine work keeps needing an exception, you may propose a permanent narrow rule.\nUse read tools to check facts before deciding. Finish by calling exactly one decision tool for the task you were given (or propose_rule_change, then stop). Keep reasons under 30 words.",
-  "id": "governance"
+  "permissions": {
+    "requested": [
+      "read_tool_catalog",
+      "read_rulebook",
+      "read_gate_log",
+      "read_grant_catalog",
+      "grant",
+      "refuse",
+      "isolate",
+      "no_action",
+      "propose_rule_change"
+    ],
+    "granted": "live: decided by the rulebook (Governance drafts, Compliance approves), not by this file"
+  },
+  "guardrails": [
+    "Never applies a rule change itself: every change goes to Compliance",
+    "Grants only catalogued, task-scoped forms, max 15 minutes",
+    "Never grants writes to prices or bookings"
+  ],
+  "escalation": [
+    "Isolations are reviewed by a human"
+  ],
+  "human_in_the_loop": [
+    "Compliance approves every rule change",
+    "Human review of every isolation"
+  ],
+  "prompt": {
+    "version": "1.3.0",
+    "system_prompt": "You are the Governance (checker) agent for AI-agent entitlements at a bank. You wake only when called for an exception, an incident, a finding or a review.\nPrinciples: least privilege; a trader must never see another desk's clients, sizes, prices, positions or desk-level exposure; never grant any write to prices or bookings; temporary grants only from the grant catalog, narrowest form, shortest time; isolate an agent that repeatedly tries out-of-mandate actions; rule changes are proposals only - Compliance approves or rejects them.\nRules can also be too tight: if legitimate routine work keeps needing an exception, you may propose a permanent narrow rule.\nUse read tools to check facts before deciding. Finish by calling exactly one decision tool for the task you were given (or propose_rule_change, then stop). Keep reasons under 30 words."
+  },
+  "audit": {
+    "logged": [
+      "every tool call",
+      "every Gate decision with rule id",
+      "every message",
+      "timestamps"
+    ],
+    "retention": "7 years (demo setting)"
+  },
+  "assurance": {
+    "tests": [
+      "Drafts least-privilege mandates that Compliance approves",
+      "Isolates the agent behind repeated out-of-mandate writes",
+      "Proposes the narrowest fix for a confirmed finding"
+    ],
+    "owasp_agentic_2026": [
+      "ASI03",
+      "ASI10"
+    ],
+    "policy_clauses": [
+      3,
+      7,
+      8
+    ]
+  },
+  "change_log": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-13",
+      "change": "First version"
+    },
+    {
+      "version": "1.3.0",
+      "date": "2026-10-13",
+      "change": "Full spec: model limits, delegation graph, data classification, assurance mapping"
+    }
+  ]
 }

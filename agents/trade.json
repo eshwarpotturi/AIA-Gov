@@ -1,12 +1,102 @@
 {
+  "spec_version": "1.0",
+  "id": "trade",
   "name": "Trade agent",
+  "version": "1.3.0",
+  "status": "approved",
   "kind": "worker",
-  "max_steps": 6,
-  "mandate": "Reads executed trades from the trade-capture system.",
+  "description": "Reads executed trades from the trade-capture system.",
+  "owner": "Global Markets Technology · Trade Capture",
+  "approved_by": "AI Governance Board (demo)",
+  "last_review": "2026-10-13",
+  "risk_tier": "High",
+  "identity": {
+    "service_account": "svc-ai-trade",
+    "acts_on_behalf_of_human": true,
+    "delegation": {
+      "can_call": [],
+      "callable_by": [
+        "orchestrator"
+      ]
+    }
+  },
+  "model": {
+    "provider": "Straive LLM Foundry",
+    "model": "gpt-4.1-mini",
+    "temperature": 0.2,
+    "max_steps": 6,
+    "timeout_s": 60,
+    "budget_inr_per_task": 0.5
+  },
   "tools": [
-    "trade_read",
-    "trade_amend"
+    {
+      "name": "trade_read",
+      "purpose": "Read today's executed trades for a named book",
+      "system": "Trade capture",
+      "access": "read",
+      "data_classification": "confidential"
+    },
+    {
+      "name": "trade_amend",
+      "purpose": "Move a booked trade to another book",
+      "system": "Trade capture",
+      "access": "write",
+      "data_classification": "restricted"
+    }
   ],
-  "system_prompt": "You are the Trade agent on a bank's Global Markets AI floor, acting for {principal_name} ({principal_role}). Mandate: read executed trades from the trade-capture system. Use your tools to answer the request; ask for a named book. Access is enforced by the entitlement Gate, not by you: if a call is denied, filtered or held, report it and stop. Be concise.",
-  "id": "trade"
+  "permissions": {
+    "requested": [
+      "trade_read"
+    ],
+    "granted": "live: decided by the rulebook (Governance drafts, Compliance approves), not by this file"
+  },
+  "guardrails": [
+    "Reads named books only",
+    "Does not amend bookings"
+  ],
+  "escalation": [
+    "Denied or filtered results are reported, not worked around"
+  ],
+  "human_in_the_loop": [],
+  "prompt": {
+    "version": "1.3.0",
+    "system_prompt": "You are the Trade agent on a bank's Global Markets AI floor, acting for {principal_name} ({principal_role}). Mandate: read executed trades from the trade-capture system. Use your tools to answer the request; ask for a named book. Access is enforced by the entitlement Gate, not by you: if a call is denied, filtered or held, report it and stop. Be concise."
+  },
+  "audit": {
+    "logged": [
+      "every tool call",
+      "every Gate decision with rule id",
+      "every message",
+      "timestamps"
+    ],
+    "retention": "7 years (demo setting)"
+  },
+  "assurance": {
+    "tests": [
+      "Other-desk rows in the trader's book come back masked",
+      "Book CR-1 denied for a JGB trader",
+      "Trade moves denied"
+    ],
+    "owasp_agentic_2026": [
+      "ASI03"
+    ],
+    "policy_clauses": [
+      1,
+      2,
+      3,
+      6
+    ]
+  },
+  "change_log": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-13",
+      "change": "First version"
+    },
+    {
+      "version": "1.3.0",
+      "date": "2026-10-13",
+      "change": "Full spec: model limits, delegation graph, data classification, assurance mapping"
+    }
+  ]
 }

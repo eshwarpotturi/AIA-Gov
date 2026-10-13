@@ -1,14 +1,115 @@
 {
+  "spec_version": "1.0",
+  "id": "compliance",
   "name": "Compliance agent",
+  "version": "1.3.0",
+  "status": "approved",
   "kind": "control",
-  "max_steps": 4,
-  "stand_in_for": "a human Compliance approver",
-  "mandate": "Reviews every proposed rule change against the written policy and approves or rejects it. Stand-in for a human approver in recorded runs; in live mode a person does this.",
+  "description": "Reviews every proposed rule change against the written policy and approves or rejects it. Stand-in for a human approver in recorded runs; in live mode a person does this.",
+  "owner": "Compliance · Technology Risk (stand-in for a human approver)",
+  "approved_by": "AI Governance Board (demo)",
+  "last_review": "2026-10-13",
+  "risk_tier": "Critical",
+  "identity": {
+    "service_account": "svc-ai-compliance",
+    "acts_on_behalf_of_human": false,
+    "delegation": {
+      "can_call": [],
+      "callable_by": [
+        "governance"
+      ]
+    }
+  },
+  "model": {
+    "provider": "Straive LLM Foundry",
+    "model": "gpt-4.1-mini",
+    "temperature": 0.1,
+    "max_steps": 4,
+    "timeout_s": 60,
+    "budget_inr_per_task": 0.3
+  },
   "tools": [
-    "read_policy",
-    "approve",
-    "reject"
+    {
+      "name": "read_policy",
+      "purpose": "Read the written entitlement policy",
+      "system": "Control plane",
+      "access": "control",
+      "data_classification": "internal"
+    },
+    {
+      "name": "approve",
+      "purpose": "Approve a proposed rule change",
+      "system": "Control plane",
+      "access": "control",
+      "data_classification": "internal"
+    },
+    {
+      "name": "reject",
+      "purpose": "Reject a proposed rule change",
+      "system": "Control plane",
+      "access": "control",
+      "data_classification": "internal"
+    }
   ],
-  "system_prompt": "You are the Compliance reviewer for AI-agent entitlement rule changes at a bank (a stand-in for a human approver). Read the policy with read_policy, check the proposed change against it, then call approve or reject with a reason under 30 words. Reject anything that widens a trader's view of another desk's data, allows writes to prices or bookings without human approval, or is broader than needed.",
-  "id": "compliance"
+  "permissions": {
+    "requested": [
+      "read_policy",
+      "approve",
+      "reject"
+    ],
+    "granted": "live: decided by the rulebook (Governance drafts, Compliance approves), not by this file"
+  },
+  "guardrails": [
+    "Fails closed: no decision means rejected",
+    "Reviews only the proposed change"
+  ],
+  "escalation": [],
+  "human_in_the_loop": [
+    "In live mode a person makes this decision"
+  ],
+  "prompt": {
+    "version": "1.3.0",
+    "system_prompt": "You are the Compliance reviewer for AI-agent entitlement rule changes at a bank (a stand-in for a human approver). Read the policy with read_policy, check the proposed change against it, then call approve or reject with a reason under 30 words. Reject anything that widens a trader's view of another desk's data, allows writes to prices or bookings without human approval, or is broader than needed."
+  },
+  "audit": {
+    "logged": [
+      "every tool call",
+      "every Gate decision with rule id",
+      "every message",
+      "timestamps"
+    ],
+    "retention": "7 years (demo setting)"
+  },
+  "assurance": {
+    "tests": [
+      "Rejects any draft that lets agents write prices or bookings",
+      "Approves the narrowest fix for a finding"
+    ],
+    "owasp_agentic_2026": [
+      "ASI03"
+    ],
+    "policy_clauses": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  "change_log": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-13",
+      "change": "First version"
+    },
+    {
+      "version": "1.3.0",
+      "date": "2026-10-13",
+      "change": "Full spec: model limits, delegation graph, data classification, assurance mapping"
+    }
+  ],
+  "stand_in_for": "a human Compliance approver"
 }

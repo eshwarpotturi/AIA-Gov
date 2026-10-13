@@ -1,11 +1,93 @@
 {
+  "spec_version": "1.0",
+  "id": "risk",
   "name": "Risk agent",
+  "version": "1.3.0",
+  "status": "approved",
   "kind": "worker",
-  "max_steps": 6,
-  "mandate": "Reads exposures and limits. Its service account is firm-wide.",
+  "description": "Reads exposures and limits. Its service account is firm-wide.",
+  "owner": "Global Markets Technology · Market Risk",
+  "approved_by": "AI Governance Board (demo)",
+  "last_review": "2026-10-13",
+  "risk_tier": "High",
+  "identity": {
+    "service_account": "svc-ai-risk",
+    "acts_on_behalf_of_human": true,
+    "delegation": {
+      "can_call": [],
+      "callable_by": [
+        "orchestrator"
+      ]
+    }
+  },
+  "model": {
+    "provider": "Straive LLM Foundry",
+    "model": "gpt-4.1-mini",
+    "temperature": 0.2,
+    "max_steps": 6,
+    "timeout_s": 60,
+    "budget_inr_per_task": 0.5
+  },
   "tools": [
-    "risk_read"
+    {
+      "name": "risk_read",
+      "purpose": "Read exposure and limit usage for a book, desk or firm",
+      "system": "Risk engine",
+      "access": "read",
+      "data_classification": "confidential"
+    }
   ],
-  "system_prompt": "You are the Risk agent on a bank's Global Markets AI floor, acting for {principal_name} ({principal_role}). Mandate: read exposure and limit usage for a scope ('book:<id>', 'desk:<id>' or 'firm'). Your service account is firm-wide, but you act for this trader. Access is enforced by the entitlement Gate, not by you: if a call is denied, filtered or held, report it and stop. Be concise.",
-  "id": "risk"
+  "permissions": {
+    "requested": [
+      "risk_read"
+    ],
+    "granted": "live: decided by the rulebook (Governance drafts, Compliance approves), not by this file"
+  },
+  "guardrails": [
+    "Firm-wide service account, but every read is limited to the trader's entitlement"
+  ],
+  "escalation": [
+    "Denied results are reported"
+  ],
+  "human_in_the_loop": [
+    "Firm-wide aggregates need human approval (after fix)"
+  ],
+  "prompt": {
+    "version": "1.3.0",
+    "system_prompt": "You are the Risk agent on a bank's Global Markets AI floor, acting for {principal_name} ({principal_role}). Mandate: read exposure and limit usage for a scope ('book:<id>', 'desk:<id>' or 'firm'). Your service account is firm-wide, but you act for this trader. Access is enforced by the entitlement Gate, not by you: if a call is denied, filtered or held, report it and stop. Be concise."
+  },
+  "audit": {
+    "logged": [
+      "every tool call",
+      "every Gate decision with rule id",
+      "every message",
+      "timestamps"
+    ],
+    "retention": "7 years (demo setting)"
+  },
+  "assurance": {
+    "tests": [
+      "Credit desk exposure denied for a JGB trader",
+      "Firm minus own desk cannot reveal another desk"
+    ],
+    "owasp_agentic_2026": [
+      "ASI03"
+    ],
+    "policy_clauses": [
+      1,
+      4
+    ]
+  },
+  "change_log": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-13",
+      "change": "First version"
+    },
+    {
+      "version": "1.3.0",
+      "date": "2026-10-13",
+      "change": "Full spec: model limits, delegation graph, data classification, assurance mapping"
+    }
+  ]
 }

@@ -179,8 +179,9 @@
     }
     function call(chain, tool, args) {
       const agent = chain[chain.length - 1];
+      const pf = typeof performance !== "undefined" ? performance : { now: () => Date.now() }, t1 = pf.now();
       const d = decide(chain, tool, args || {});
-      const ev = { kind: "gateway", agent, chain: [...chain], tool, args, decision: d.decision, reason: d.reason, rule_id: d.rule_id }; events.push(ev);
+      const ev = { kind: "gateway", agent, chain: [...chain], tool, args, decision: d.decision, reason: d.reason, rule_id: d.rule_id, gate_ms: +(pf.now() - t1).toFixed(3) }; events.push(ev);
       if (d.decision === "deny") return "DENIED by entitlement gateway: " + d.reason;
       if (d.decision === "approval") { ev.held = true; return "HELD for human approval. Not executed."; }
       const out = exec(state, tool, args || {}, chain, rules, grants);

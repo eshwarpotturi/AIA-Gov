@@ -1,7 +1,14 @@
+# secrets and local tooling
 .foundry-token
 .foundry-token.txt
-node_modules/
 tools/
 node.zip
+node_modules/
+# private notes
 PITCH.md
 ADITI-INPUTS.md
+# local runs and old versions
+runs/
+archive/
+data.*.js
+run-log.txt

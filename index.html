@@ -34,8 +34,8 @@ h1{font-family:var(--fd);font-size:clamp(1.4rem,2.6vw,2rem);margin:0;line-height
 .col{display:grid;gap:12px;min-width:0}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;gap:8px;min-width:0}
 /* stage */
-.stage{position:relative;width:100%;aspect-ratio:16/10.5;background:radial-gradient(circle at 50% 45%,var(--floor2),var(--floor) 72%);border-radius:12px;overflow:hidden;border:1px solid var(--line);--bw:64px;--bf:.7rem}
-@media(max-width:760px){.stage{aspect-ratio:1/1.15;--bw:40px;--bf:.56rem}}
+.stage{position:relative;width:100%;aspect-ratio:16/10.5;background:radial-gradient(circle at 50% 45%,var(--floor2),var(--floor) 72%);border-radius:12px;overflow:hidden;border:1px solid var(--line);--bw:45px;--bf:.66rem}
+@media(max-width:760px){.stage{aspect-ratio:1/1.15;--bw:28px;--bf:.52rem}}
 .zone{position:absolute;transform:translate(-50%,-50%);text-align:center;border-radius:9px;padding:6px 8px;width:15%;background:var(--panel);border:1px solid var(--line)}
 .zone .n{font:700 .82rem/1.05 var(--fd)}.zone .d{font:.6rem/1.2 var(--fm);color:var(--muted);margin-top:2px}
 .zone .step{position:absolute;top:-9px;left:-7px;font:.58rem var(--fm);background:var(--accent);color:#0b1020;border-radius:999px;padding:0 5px}
@@ -43,7 +43,7 @@ h1{font-family:var(--fd);font-size:clamp(1.4rem,2.6vw,2rem);margin:0;line-height
 .zone.iso{border-style:dashed;border-color:var(--deny);background:transparent}.zone.iso .n{color:var(--deny)}
 .zone.f-allow{box-shadow:0 0 0 2px var(--allow),0 0 22px var(--allow-soft)}.zone.f-deny{box-shadow:0 0 0 2px var(--deny),0 0 22px var(--deny-soft)}.zone.f-filtered{box-shadow:0 0 0 2px var(--filt),0 0 22px var(--filt-soft)}.zone.f-approval{box-shadow:0 0 0 2px var(--hold)}
 .gate{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);width:22%;text-align:center;border-radius:12px;padding:8px;background:var(--accent-soft);border:2px solid var(--accent);z-index:3}
-.gate .n{font:700 .95rem var(--fd)}.gate .d{font:.6rem var(--fm);color:var(--muted)}
+.gate .n{font:700 .95rem var(--fd)}.gate .gv{font:600 .66rem/1.3 var(--fm);margin-top:3px;min-height:1.3em}.gate .d{font:.6rem var(--fm);color:var(--muted)}
 .gate.allow{border-color:var(--allow);background:var(--allow-soft)}.gate.deny{border-color:var(--deny);background:var(--deny-soft)}.gate.approval{border-color:var(--hold);background:var(--hold-soft)}.gate.filtered{border-color:var(--filt);background:var(--filt-soft)}
 /* action card: what is happening, on the floor */
 .act{position:absolute;left:50%;top:21%;transform:translate(-50%,-50%);width:min(64%,560px);background:rgba(13,19,30,.94);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:8px 12px;z-index:8;opacity:0;transition:opacity .2s;pointer-events:none}
@@ -58,14 +58,31 @@ h1{font-family:var(--fd);font-size:clamp(1.4rem,2.6vw,2rem);margin:0;line-height
 .bot .eyes{position:absolute;width:34%;display:flex;justify-content:space-between;z-index:1}.bot .eyes i{width:6px;height:6px;border-radius:50%;background:#0b1020}
 .bot.human .body{border-radius:50% 50% 14px 14px}.bot.human .body::after{display:none}
 .bot .nm{font:600 var(--bf) var(--fm);margin-top:3px;white-space:nowrap}
-.bot .tag{position:absolute;bottom:calc(var(--bw)*.78 + 8px);left:50%;transform:translateX(-50%);font:.62rem/1.25 var(--fm);background:var(--c);color:#0b1020;border-radius:6px;padding:2px 7px;white-space:nowrap;max-width:220px;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .2s}
+.bot .tag{position:absolute;bottom:100%;margin-bottom:5px;z-index:4;box-shadow:0 2px 6px rgba(0,0,0,.5);left:50%;transform:translateX(-50%);font:.62rem/1.25 var(--fm);background:var(--c);color:#0b1020;border-radius:6px;padding:2px 7px;white-space:nowrap;max-width:220px;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .2s}
 .bot.busy .tag{opacity:1}
 .bot .say{position:absolute;top:calc(100% + 2px);left:50%;transform:translateX(-50%);width:200px;font-size:.66rem;line-height:1.3;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:5px 8px;text-align:left;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
 .bot.talk .say{opacity:1}
-.bot.talk{z-index:30}
+.bot.talk{z-index:30}.bot.busy{z-index:25}
+.zone,.gate{cursor:pointer}.gate{z-index:6}
 .bot .say{width:280px;font-size:.76rem;line-height:1.38;border-color:var(--c);box-shadow:0 6px 18px rgba(0,0,0,.55);max-height:9.5em;overflow:auto}
 .bot.edge-l .say{left:0;transform:none}.bot.edge-r .say{left:auto;right:0;transform:none}
 .bot.low .say{top:auto;bottom:calc(100% + 4px)}
+.now{border-left:5px solid var(--accent);min-height:132px;align-content:start}
+.now.allow{border-left-color:var(--allow)}.now.deny{border-left-color:var(--deny)}.now.approval{border-left-color:var(--hold)}.now.filtered{border-left-color:var(--filt)}.now.ctl{border-left-color:var(--gov)}
+.now .l1,.now .l2,.now .l3{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.now .l1{font:.72rem var(--fm);color:var(--muted);text-transform:uppercase;letter-spacing:.03em}.now .l2{font:600 .95rem/1.35 var(--fb)}.now .l3{font-size:.82rem;color:var(--muted);line-height:1.4}
+@media(min-width:1051px){.main>.col:last-child{position:sticky;top:8px}}
+.top{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(360px,1fr);gap:12px;align-items:start}
+@media(max-width:1050px){.top{grid-template-columns:1fr}}
+.dash{border-top:4px solid var(--accent)}
+.dg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.dg .tile{padding:7px 6px}.dg .tile .n{font-size:1.25rem}.dg .tile .l{font-size:.62rem;line-height:1.25}
+.dsec{font:.6rem var(--fm);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:6px 0 3px}
+.badges{display:flex;flex-wrap:wrap;gap:4px}.badges span{font:.64rem var(--fm);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+@media(max-width:560px){.dg{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.spec h4{font:700 .82rem var(--fd);margin:10px 0 3px;color:var(--accent)}.spec table{width:100%;border-collapse:collapse;font-size:.76rem}.spec td,.spec th{border-bottom:1px solid var(--line);padding:3px 5px;text-align:left;vertical-align:top}.spec th{color:var(--muted);font-weight:500}
+.spec ul{margin:0;padding-left:18px;font-size:.78rem}.pill{font:.62rem var(--fm);padding:1px 6px;border-radius:4px;border:1px solid var(--line)}
+.pill.restricted{color:var(--deny);border-color:var(--deny)}.pill.confidential{color:var(--hold);border-color:var(--hold)}.pill.internal{color:var(--muted)}
 .feed{display:grid;gap:4px;max-height:260px;overflow:auto;font-size:.8rem;scroll-behavior:smooth}
 .feed div{border-left:4px solid var(--c);background:var(--floor);border-radius:0 6px 6px 0;padding:4px 8px}
 .feed b{font:600 .7rem var(--fm);color:var(--c)}.feed .to{color:var(--muted);font:.66rem var(--fm)}
@@ -104,12 +121,15 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
 .live{font:.7rem var(--fm);color:var(--hold)}
 </style></head><body>
 <div class="wrap">
-  <header style="display:grid;gap:6px">
+  <div class="top">
+  <header style="display:grid;gap:6px;align-content:start">
     <div class="eb">Maker-checker for AI agent permissions · Global Markets</div>
     <h1>The trader gets the answer, not the data</h1>
     <p class="q">“Why does my trading desk show a $2 million discrepancy in today's positions?”</p>
-    <p class="sub">Eight AI agents, each with its own system prompt, tools and mandate (click any agent to see them). Every action goes through the <b>Gate</b>, which is plain code and checks both the agent's mandate and what the <b>human</b> may see. <b>Governance</b> drafts the rules and handles exceptions, the <b>Auditor</b> attacks them, and <b>Compliance</b> approves every change. AI proposes, Compliance approves, code enforces, and every attack makes the rules stronger.</p>
+    <p class="sub">Eight AI agents, each with a versioned spec (owner, model limits, tools, data classification, guardrails; click any agent). Every action goes through the <b>Gate</b>, which is plain code and checks both the agent's mandate and what the <b>human</b> may see. <b>Governance</b> drafts the rules and handles exceptions, the <b>Auditor</b> attacks them, and <b>Compliance</b> approves every change. AI proposes, Compliance approves, code enforces, and every attack makes the rules stronger.</p>
   </header>
+  <div class="card dash" id="dash"><div class="vh"><h3>Run results</h3><span class="sub" id="dashsub" style="font-size:.7rem"></span></div><div id="dashBody"><p class="sub">Loading…</p></div></div>
+  </div>
   <div class="life" id="life"></div>
   <div class="bar">
     <button class="btn" id="play">▶ Play</button><button class="btn g" id="step">Step ▸</button><button class="btn g" id="restart">↺ Restart</button>
@@ -120,19 +140,19 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
   <div class="main">
     <div class="col">
       <div class="stage" id="stage"><div class="act" id="act"><div class="w" id="actW"></div><div class="t" id="actT"></div><div class="r" id="actR"></div></div><div class="banner" id="banner"></div></div>
-      <div class="legend"><span><i style="background:var(--allow)"></i>allowed</span><span><i style="background:var(--filt)"></i>allowed, filtered</span><span><i style="background:var(--deny)"></i>denied</span><span><i style="background:var(--hold)"></i>held for a human</span><span><i style="background:var(--gov)"></i>governance / control agents</span><span>· click an agent for its prompt, tools and mandate</span></div>
+      <div class="legend"><span><i style="background:var(--allow)"></i>allowed</span><span><i style="background:var(--filt)"></i>allowed, filtered</span><span><i style="background:var(--deny)"></i>denied</span><span><i style="background:var(--hold)"></i>held for a human</span><span><i style="background:var(--gov)"></i>governance / control agents</span><span>· click any agent, system, desk or the Gate for its spec</span></div>
       <div class="cap"><div class="ct" id="capT">Ready</div><div class="cd" id="capD">Press Play. Use the scene buttons to jump.</div></div>
       <div class="card"><div class="vh"><h3>Conversation</h3><span class="sub" style="font-size:.7rem">every message, newest at the bottom</span></div><div class="feed" id="feed"></div></div>
       <div class="card ans" id="ans"><h3>What the trader gets</h3><p class="sub">Appears when the Orchestrator answers.</p></div>
     </div>
     <div class="col">
+      <div class="card now" id="now"><h3>What's happening</h3><div class="l1" id="nowW">Ready</div><div class="l2" id="nowT">Press Play.</div><div class="l3" id="nowR"></div></div>
       <div class="card"><div class="vh"><h3>Rulebook (live)</h3><span class="vtag" id="vtag">no rules</span></div><p class="sub" id="vnote" style="font-size:.76rem"></p>
         <div class="rbh">What the human may see</div><div class="rb" id="rbE"></div>
         <div class="rbh">Agent mandates (drafted by Governance)</div><div class="rb" id="rbM"></div>
         <div class="rbh">Data policy (bank's existing settings)</div><div class="rb" id="rbD"></div>
         <div class="rbh">Temporary grants and isolation</div><div class="rb" id="rbG"></div></div>
       <div class="card"><h3>The loop</h3><div class="loop" id="loop"></div><p class="loopnote" id="loopnote">Incident or finding → Governance proposes → Compliance reviews → new rule live → same attack re-run.</p><div class="plog" id="plog"></div></div>
-      <div class="card"><h3>Run scoreboard</h3><div class="score" id="score"></div><p class="sub" id="scorenote" style="font-size:.74rem"></p></div>
     </div>
   </div>
   <footer><p id="foot"></p><p>What is real: every agent is an LLM (system prompt, tools, multi-step tool-calling loop) and decided its own actions; the Gate is plain code and made every allow/filter/deny/hold. The trader asked one question. Labelled tests run agents in an explicit “assume compromised” mode, because that is how a control is tested. Compliance here is an agent standing in for a human; in live mode a person approves. Synthetic data, fictional clients: one trader, two desks, four systems.</p></footer>
@@ -159,9 +179,9 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
   const LABEL = { trade_read: "read trades", trade_amend: "move a booked trade", marketdata_read: "read a price", marketdata_set: "overwrite a price", position_read: "read positions", impact_read: "read a trade's net impact", risk_read: "read exposure", break_raise: "raise a break", ask_agent: "ask a specialist", request_access: "ask Governance for an exception",
     read_tool_catalog: "read the tool catalog", read_rulebook: "read the rulebook", read_gate_log: "read the Gate log", read_grant_catalog: "read the grant catalog", read_policy: "read the written policy" };
   const stage = document.getElementById("stage");
-  for (const [n, z] of Object.entries(ZONES)) { const d = document.createElement("div"); d.className = "zone " + (z.c || ""); d.id = "z-" + n; d.style.left = z.x + "%"; d.style.top = z.y + "%";
+  for (const [n, z] of Object.entries(ZONES)) { const d = document.createElement("div"); d.className = "zone " + (z.c || ""); d.id = "z-" + n; d.onclick = () => showPlace(n); d.style.left = z.x + "%"; d.style.top = z.y + "%";
     d.innerHTML = (z.s ? `<span class="step">${z.s}</span>` : "") + `<div class="n">${esc(n)}</div><div class="d">${esc(z.d)}</div>`; stage.appendChild(d); }
-  const gate = document.createElement("div"); gate.className = "gate"; gate.id = "gate"; gate.innerHTML = `<div class="n">The Gate</div><div class="d">code · agent mandate ∩ human entitlement</div>`; stage.appendChild(gate);
+  const gate = document.createElement("div"); gate.className = "gate"; gate.id = "gate"; gate.innerHTML = `<div class="n">The Gate</div><div class="d">code · agent mandate ∩ human entitlement</div><div class="gv" id="gv"></div>`; gate.onclick = () => showPlace("Gate"); stage.appendChild(gate);
   // agents
   const SETUP = () => E.find(e => e.kind === "setup") || { agents: {}, principal: {} };
   const bots = {};
@@ -185,14 +205,19 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
   function feed(id, t, to) { const f = document.getElementById("feed"); f.querySelectorAll(".now").forEach(x => x.classList.remove("now"));
     const d = document.createElement("div"); d.className = "now"; d.style.setProperty("--c", `var(--${id === "kenji" ? "human" : id})`);
     d.innerHTML = `<b>${esc(short(id))}</b>${to ? ` <span class="to">→ ${esc(short(to))}</span>` : ""}<br>${esc(t)}`; f.appendChild(d); if (!instant) f.scrollTop = f.scrollHeight; }
+  function gateFeed(e) { const f = document.getElementById("feed"); const d = document.createElement("div");
+    d.style.setProperty("--c", `var(--${{ allow: "allow", deny: "deny", approval: "hold", filtered: "filt" }[e.decision]})`);
+    d.innerHTML = `<b>Gate · ${VERD[e.decision]}</b> <span class="to">${esc(e.chain.map(short).join(" → "))} · ${esc(LABEL[e.tool] || e.tool)} (${esc(argsTxt(e.args))}) · rule ${esc(e.rule_id || "")}</span><br>${resultTxt(e)}`;
+    f.appendChild(d); if (!instant) f.scrollTop = f.scrollHeight; }
   function say(id, t, to) { if (!t) return; feed(id, t, to); const b = bots[id]; if (!b || instant) return;
     for (const k in bots) if (k !== id) bots[k].classList.remove("talk");
     (EDGE[id] || "").split(" ").filter(Boolean).forEach(c => b.classList.add(c));
     b.querySelector(".say").textContent = t.length > 420 ? t.slice(0, 418) + "…" : t; b.classList.add("talk"); }
   const readTime = t => Math.min(7000, 1400 + String(t || "").length * 28);
   const cap = (t, d) => { document.getElementById("capT").textContent = t; document.getElementById("capD").innerHTML = d; };
-  function card(cls, w, t, r) { if (instant) return; const a = document.getElementById("act"); a.className = "act show " + (cls || ""); document.getElementById("actW").innerHTML = w; document.getElementById("actT").innerHTML = t; document.getElementById("actR").innerHTML = r || ""; }
-  const hideCard = () => document.getElementById("act").classList.remove("show");
+  function card(cls, w, t, r) { if (instant) return; const n = document.getElementById("now"); n.className = "card now " + (cls || "");
+    document.getElementById("nowW").innerHTML = w || ""; document.getElementById("nowT").innerHTML = t || ""; document.getElementById("nowR").innerHTML = r || ""; return; const a = document.getElementById("act"); a.className = "act show " + (cls || ""); document.getElementById("actW").innerHTML = w; document.getElementById("actT").innerHTML = t; document.getElementById("actR").innerHTML = r || ""; }
+  const hideCard = () => {};
   function banner(t) { const b = document.getElementById("banner"); b.textContent = t || ""; b.classList.toggle("show", !!t); }
   const flash = (z, c) => { const el = document.getElementById("z-" + z); if (!el || instant) return; el.classList.add("f-" + c); setTimeout(() => el.classList.remove("f-" + c), 1100 * speed); };
   const lifeOn = arr => { for (let i = 1; i <= 7; i++) document.getElementById("life-" + i).classList.toggle("on", !!(arr && arr.includes(i))); };
@@ -235,11 +260,15 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
   function renderLoop() { document.getElementById("loop").innerHTML = LOOP.map((l, i) => `<div class="${S.loop === i + 1 ? "on" : ""}"><b>${i + 1}</b>${l}</div>`).join("");
     document.getElementById("plog").innerHTML = S.props.slice().reverse().map(p => `<div><span class="st" style="color:${p.status === "approved" ? "var(--allow)" : p.status === "rejected" ? "var(--deny)" : "var(--hold)"}">${esc(p.id)} · ${esc(p.status)}${p.by ? " by " + esc(p.by) : ""}</span><br>${esc(p.diff.map(x => x.id + ": " + x.from + " → " + x.to).join("; "))}${p.reason ? `<br><span class="sub" style="font-size:.7rem">${esc(p.reason)}</span>` : ""}</div>`).join(""); }
   function scoreboard(s) {
-    if (!s) { document.getElementById("score").innerHTML = ""; return; }
-    document.getElementById("score").innerHTML = [["other-desk data in the trader's final answer", s.final_answer_leaks, s.final_answer_leaks ? "bad" : "good"], ["leaks caught by the Gate's detector", s.exposure_alerts, ""], ["writes to prices or bookings", s.writes_executed, s.writes_executed ? "bad" : "good"],
-      ["gaps confirmed by the Auditor", s.findings_confirmed, ""], ["fixes holding on re-test", s.retests_held + "/" + (s.retests_held + s.retests_open), s.retests_open ? "bad" : "good"], ["rule changes approved / rejected", s.approved + "/" + s.rejected, ""]]
-      .map(([l, n, c]) => `<div class="tile"><div class="n ${c}">${n}</div><div class="l">${l}</div></div>`).join("");
-    document.getElementById("scorenote").textContent = `Gate: ${s.allowed} allowed, ${s.filtered} filtered, ${s.denied} denied, ${s.held} held. Exceptions granted: ${s.grants}. Agents isolated: ${s.isolations}. Auditor probes: ${s.probes}. Breaks to Middle Office: ${s.breaks_raised}. ${s.calls} model calls, about ₹${s.cost_inr}.`;
+    const body = document.getElementById("dashBody"), sub = document.getElementById("dashsub");
+    if (!s) { body.innerHTML = `<p class="sub">${LIVE ? "Live run: results appear when it finishes." : "No results."}</p>`; sub.textContent = ""; return; }
+    const t = (n, l, c) => `<div class="tile"><div class="n ${c || ""}">${n == null ? "–" : n}</div><div class="l">${l}</div></div>`;
+    const yes = v => v ? "✓" : "✗";
+    sub.textContent = (s.model || "") + " · " + (s.duration_s != null ? s.duration_s + " s run" : "");
+    body.innerHTML =
+      `<div class="dsec">Outcome</div><div class="dg">${t(yes(s.answer_complete), "trader's $2M fully explained", s.answer_complete ? "good" : "bad")}${t(s.final_answer_leaks, "other-desk data in his answer", s.final_answer_leaks ? "bad" : "good")}${t(s.writes_executed, "writes to prices or bookings", s.writes_executed ? "bad" : "good")}${t(s.cost_inr_trader_question != null ? "₹" + s.cost_inr_trader_question : null, "cost per trader question")}</div>`
+      + `<div class="dsec">The Gate (code, no AI)</div><div class="dg">${t(s.gate_decisions, `decisions: ${s.allowed} allow · ${s.filtered} filter · ${s.denied} deny · ${s.held} hold`)}${t(s.gate_ms_avg != null ? s.gate_ms_avg + " ms" : null, "average decision time")}${t(s.fields_withheld, "fields withheld from the trader")}${t(s.tools_granted != null ? s.tools_granted + "/" + s.tools_visible : null, "tools granted / visible to agents")}</div>`
+      + `<div class="dsec">Attack and the loop</div><div class="dg">${t(s.attacks_blocked, "attack actions blocked", "good")}${t(s.containment_s != null ? s.containment_s + " s" : null, "first attack → agent isolated")}${t(s.findings_confirmed + " · " + s.retests_held + "/" + (s.retests_held + s.retests_open), "gaps found · fixes held on re-test", s.retests_open ? "bad" : "good")}${t(s.finding_to_fix_s_avg != null ? s.finding_to_fix_s_avg + " s" : null, "finding → fix live (Compliance-approved)")}</div>`;
   }
   function renderAnswer(a) { document.getElementById("ans").innerHTML = `<h3>What the trader gets${a.rerun ? " · same question, after the fix" : ""}</h3>`
     + (a.leaks ? `<p style="color:var(--deny);font-size:.82rem">⚠ This answer was built on a response that carried another desk's data (${a.leaks}). The Gate's detector raised an alert.</p>` : "")
@@ -247,16 +276,62 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
     + `<div class="k" style="color:var(--allow)">Explained (checked against the Gate log)</div><ul>${a.seen.map(x => `<li>${esc(x)}</li>`).join("") || "<li>nothing</li>"}</ul>`
     + `<div class="k" style="color:var(--filt)">Withheld or denied, and why</div><ul>${a.withheld.map(x => `<li>${esc(x)}</li>`).join("") || "<li>nothing</li>"}</ul>`
     + (a.complete ? "" : `<p class="sub" style="color:var(--hold)">In this run the explanation was incomplete. That's real agent behaviour, shown as it happened.</p>`); }
+  function showPlace(n) {
+    const TOOLS = { Trades: ["trade_read", "trade_amend"], "Market Data": ["marketdata_read", "marketdata_set"], Positions: ["position_read", "impact_read"], Risk: ["risk_read"], "Middle Office": ["break_raise"] };
+    const SYS = {
+      Trades: { what: "Trade-capture system: every executed trade, its book, owning desk, client and counterparty.", owner: "Global Markets Technology · Trade Capture", cls: "confidential (reads) · restricted (amend)", agents: "Trade agent", step: "4 · Booking & validation" },
+      "Market Data": { what: "Internal price feed, compared against the vendor close. In this run JGB 30Y is stale (yesterday's close).", owner: "Global Markets Technology · Market Data", cls: "internal (reads) · restricted (overwrite)", agents: "Market Data agent", step: "2 · Pricing & quote" },
+      Positions: { what: "Holdings and book valuation (P&L), and the net impact of one trade on a book.", owner: "Global Markets Technology · Product Control", cls: "confidential", agents: "Position agent", step: "7 · Reconciliation & reporting" },
+      Risk: { what: "Exposure and limit usage by book, desk or firm. The Risk agent's service account is firm-wide.", owner: "Global Markets Technology · Market Risk", cls: "confidential", agents: "Risk agent", step: "5 · Risk & compliance" },
+      "Middle Office": { what: "Human team. Receives breaks raised by agents and investigates them. Agents cannot fix bookings themselves.", owner: "Operations · Middle Office (people)", cls: "internal", agents: "Orchestrator (raise a break)", step: "7 · Reconciliation & reporting" },
+    };
+    let h;
+    const rulesFor = tools => { const rs = S.rules.filter(r => tools.includes(r.tool)); return rs.length ? rs.map(r => `<tr><td>${esc("M:" + r.agent + "." + r.tool)}</td><td>${esc(short(r.agent))} may ${esc(LABEL[r.tool] || r.tool)}</td><td><span class="eff ${r.effect}">${r.effect}</span></td></tr>`).join("") : `<tr><td colspan="3">No agent may use it yet (default deny).</td></tr>`; };
+    const gw = (pred) => E.slice(0, ptr).filter(e => e.kind === "gateway" && e.tool !== "ask_agent" && pred(e));
+    const counts = list => { const c = { allow: 0, filtered: 0, deny: 0, approval: 0 }; list.forEach(e => c[e.decision]++); return `${c.allow} allowed · ${c.filtered} filtered · ${c.deny} denied · ${c.approval} held`; };
+    if (n === "Gate") { const s = (E.find(e => e.kind === "done") || {}).summary || {}, d = S.data || SETUP().data_policy || {};
+      h = `<div class="spec"><h3>The Gate <span class="pill">code, no AI</span> <span class="pill">fails closed</span></h3>
+        <p class="row">Every tool call by every agent passes here before it reaches a system. It is plain, deterministic code: nobody can talk it into a yes.</p>
+        <h4>Two checks on every call</h4><table><tr><th>1. Agent mandate</th><td>May this agent use this tool at all? (M: rules, drafted by Governance, approved by Compliance)</td></tr>
+        <tr><th>2. Human entitlement</th><td>May the human this agent acts for see this data? (E: rules for the trader, plus D: data policies). Effective access = agent ∩ human.</td></tr>
+        <tr><th>Outcomes</th><td><span class="v allow">ALLOW</span> <span class="v filtered">ALLOW · FILTERED</span> (other-desk rows masked) <span class="v deny">DENY</span> <span class="v approval">HOLD → human</span></td></tr>
+        <tr><th>Default</th><td>Anything not explicitly allowed is denied. Every decision is logged with the rule that fired.</td></tr>
+        <tr><th>Detectors</th><td>Raises a data-exposure alert if another desk's data reaches the trader, and an incident alert on any attempted write or repeated other-desk reads. Both wake Governance.</td></tr></table>
+        <h4>Live now (rulebook ${S.version ? "v" + S.version : "empty"})</h4><table><tr><th>Mandates</th><td>${S.rules.length} rules</td></tr><tr><th>Data policies</th><td>firm totals: ${esc(d.firm)} · 'all' books: ${esc(d.wildcard)} · notes on other-desk rows: ${esc(d.free_text)}</td></tr>
+        <tr><th>Decisions so far</th><td>${counts(gw(() => true))}</td></tr>${s.gate_ms_avg != null ? `<tr><th>Decision time (this run)</th><td>avg ${s.gate_ms_avg} ms · max ${s.gate_ms_max} ms</td></tr>` : ""}</table>
+        <p class="row sub">Source: core.js (makeGateway, decide). Unit-tested: node core.test.js</p></div>`; }
+    else if (SYS[n]) { const x = SYS[n], tools = TOOLS[n];
+      h = `<div class="spec"><h3>${esc(n)} <span class="pill">${n === "Middle Office" ? "human team" : "system"}</span> <span class="pill">lifecycle ${esc(x.step)}</span></h3><p class="row">${esc(x.what)}</p>
+        <table><tr><th>Owner</th><td>${esc(x.owner)}</td></tr><tr><th>Data classification</th><td>${esc(x.cls)}</td></tr><tr><th>Reached by</th><td>${esc(x.agents)}, only through the Gate</td></tr></table>
+        <h4>Tools into this ${n === "Middle Office" ? "team" : "system"}</h4><table><tr><th>Tool</th><th>Purpose</th></tr>${tools.map(t => `<tr><td>${esc(t)}</td><td>${esc(LABEL[t] || t)}</td></tr>`).join("")}</table>
+        <h4>Rules in force now</h4><table>${rulesFor(tools)}</table>
+        <h4>Gate decisions here so far</h4><p class="row">${counts(gw(e => tools.includes(e.tool)))}</p>
+        ${n === "Middle Office" ? `<h4>Breaks received</h4><p class="row">${esc(E.slice(0, ptr).filter(e => e.kind === "gateway" && e.tool === "break_raise" && e.decision === "allow").map(e => e.args.trade_id + ": " + e.args.note).join(" · ") || "none yet")}</p>` : ""}</div>`; }
+    else if (n === "Isolation") h = `<div class="spec"><h3>Isolation <span class="pill">quarantine</span></h3><p class="row">Where Governance sends an agent that keeps trying out-of-mandate actions. An isolated agent's every call is denied by the Gate until a human reviews it.</p>
+        <table><tr><th>Isolated now</th><td>${esc([...S.iso].map(short).join(", ") || "nobody")}</td></tr><tr><th>Decided by</th><td>Governance agent (after a Gate incident alert)</td></tr><tr><th>Released by</th><td>A human review (scripted step in the recording)</td></tr></table></div>`;
+    else { const id = { Governance: "governance", Auditor: "auditor", Compliance: "compliance" }[n]; if (id) return showDef(id); }
+    document.getElementById("dlgBody").innerHTML = h; document.getElementById("dlg").showModal(); }
   function showDef(id) {
     const d = (SETUP().agents || {})[id], P = SETUP().principal || {};
     let h;
     if (id === "kenji") h = `<h3>${esc(P.name)} (human)</h3><p class="row">${esc(P.role)}. Entitled to books ${esc((P.books || []).join(", "))}, desks ${esc((P.desks || []).join(", "))}. Asks one question; every agent call carries his identity.</p>`;
     else if (!d) h = "<p>No definition loaded yet.</p>";
-    else { const allowed = S.rules.filter(r => r.agent === id).map(r => r.tool + " (" + r.effect + ")");
-      h = `<h3>${esc(d.name)}</h3><p class="row"><b>Kind:</b> ${d.kind === "worker" ? "working agent" : "control agent"}${d.stand_in_for ? " · stand-in for " + esc(d.stand_in_for) : ""} · <b>max steps:</b> ${d.max_steps}</p>
-        <p class="row"><b>Mandate:</b> ${esc(d.mandate)}</p><p class="row"><b>Tools it can see:</b> ${esc(d.tools.join(", "))}</p>
-        ${d.kind === "worker" ? `<p class="row"><b>Allowed by the current rulebook:</b> ${esc(allowed.join(", ") || "nothing yet")}</p>` : ""}
-        <p class="row"><b>System prompt</b> (from agents/${esc(id)}.json):</p><pre>${esc(d.system_prompt)}</pre>`; }
+    else { const M = d.model || {}, I = d.identity || {}, Dg = I.delegation || {}, A = d.assurance || {};
+      const granted = S.rules.filter(r => r.agent === id).map(r => r.tool + " (" + r.effect + ")");
+      const list = a => (a && a.length) ? `<ul>${a.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : `<p class="sub">none</p>`;
+      h = `<div class="spec"><h3>${esc(d.name)} <span class="pill">v${esc(d.version || "")}</span> <span class="pill">${esc(d.status || "")}</span> <span class="pill">risk: ${esc(d.risk_tier || "")}</span></h3>
+        <p class="row">${esc(d.description || d.mandate || "")}</p>
+        <table><tr><th>Owner</th><td>${esc(d.owner || "")}</td></tr><tr><th>Approved by</th><td>${esc(d.approved_by || "")} · reviewed ${esc(d.last_review || "")}</td></tr>
+        <tr><th>Service account</th><td>${esc(I.service_account || "")} · acts for a human: ${I.acts_on_behalf_of_human ? "yes" : "no"}</td></tr>
+        <tr><th>May call</th><td>${esc((Dg.can_call || []).join(", ") || "nobody")} <span class="sub">(enforced)</span></td></tr><tr><th>Called by</th><td>${esc((Dg.callable_by || []).join(", "))}</td></tr>
+        <tr><th>Model</th><td>${esc(M.provider || "")} · ${esc(M.model || "")} · temperature ${M.temperature} · max ${M.max_steps} steps · ${M.timeout_s} s · ₹${M.budget_inr_per_task}/task <span class="sub">(enforced)</span></td></tr></table>
+        <h4>Tools</h4><table><tr><th>Tool</th><th>Purpose</th><th>Access</th><th>Data</th></tr>${(d.tools || []).map(t => `<tr><td>${esc(t.name)}</td><td>${esc(t.purpose || "")}<br><span class="sub">${esc(t.system || "")}</span></td><td>${esc(t.access || "")}</td><td><span class="pill ${esc(t.data_classification || "")}">${esc(t.data_classification || "")}</span></td></tr>`).join("")}</table>
+        <h4>Permissions</h4><table><tr><th>Requested</th><td>${esc(((d.permissions || {}).requested || []).join(", "))}</td></tr>${d.kind === "worker" ? `<tr><th>Granted now (rulebook v${S.version})</th><td>${esc(granted.join(", ") || "nothing yet")}</td></tr>` : ""}</table>
+        <h4>Guardrails</h4>${list(d.guardrails)}<h4>Escalation</h4>${list(d.escalation)}<h4>Human in the loop</h4>${list(d.human_in_the_loop)}
+        <h4>Assurance</h4>${list(A.tests)}<p class="row">OWASP: ${esc((A.owasp_agentic_2026 || []).join(", "))} · policy clauses: ${esc((A.policy_clauses || []).join(", "))}</p>
+        <h4>Audit</h4><p class="row">Logs ${esc(((d.audit || {}).logged || []).join(", "))} · retention ${esc((d.audit || {}).retention || "")}</p>
+        <h4>System prompt v${esc((d.prompt || {}).version || "")}</h4><pre>${esc((d.prompt && d.prompt.system_prompt) || d.system_prompt || "")}</pre>
+        <h4>Change log</h4>${list((d.change_log || []).map(c => c.version + " · " + c.date + " · " + c.change))}</div>`; }
     document.getElementById("dlgBody").innerHTML = h; document.getElementById("dlg").showModal(); }
   document.getElementById("dlgClose").onclick = () => document.getElementById("dlg").close();
 
@@ -269,28 +344,32 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
     tag(a, (LABEL[e.tool] || e.tool) + (e.args && (e.args.scope || e.args.book || e.args.instrument) ? " · " + (e.args.scope || e.args.book || e.args.instrument) : ""));
     card("", `${esc(e.chain.map(short).join(" → "))}`, `${esc(short(a))} wants to <b>${esc(LABEL[e.tool] || e.tool)}</b> <span class="sub">(${esc(argsTxt(e.args))})</span>`);
     cap(`${NAME(a)} → ${LABEL[e.tool] || e.tool}`, `On behalf of <b>${esc(NAME(e.chain[0]))}</b>. The Gate checks the agent's mandate and ${esc(who)}'s entitlement.`);
-    move(a, { x: 50, y: 50 }); await sleep(900);
+    move(a, { x: 33, y: 44 }); await sleep(900);
     gate.className = "gate " + e.decision; S.fired = e.rule_id; renderRules();
+    document.getElementById("gv").innerHTML = `<span class="v ${e.decision}">${VERD[e.decision]}</span><br>${esc(e.rule_id || "")}`;
+    gateFeed(e);
     card(e.decision, `${esc(e.chain.map(short).join(" → "))} · <span class="v ${e.decision}">${VERD[e.decision]}</span> · rule ${esc(e.rule_id || "")}`, `${esc(short(a))} · ${esc(LABEL[e.tool] || e.tool)} <span class="sub">(${esc(argsTxt(e.args))})</span>`, resultTxt(e));
-    if ((e.decision === "allow" || e.decision === "filtered") && z) { move(a, { x: ZONES[z].x, y: ZONES[z].y + 13 }); flash(z, e.decision); }
+    if ((e.decision === "allow" || e.decision === "filtered") && z) { move(a, { x: ZONES[z].x, y: ZONES[z].y + 19 }); flash(z, e.decision); }
     else if (z) flash(z, e.decision);
     cap({ allow: "Allowed", filtered: "Allowed, filtered", deny: "Denied at the Gate", approval: "Held for a human" }[e.decision] + ` · rule ${e.rule_id || ""}`,
       e.decision === "filtered" ? "Another desk's row sits in his book. It stays visible so he knows it exists; the client, size, price and owning desk are withheld." : e.decision === "deny" ? esc(e.reason) + "." : e.decision === "approval" ? esc(e.reason) + ". Nothing runs until a person approves." : "Within the agent's mandate and the trader's entitlement.");
     await sleep(e.decision === "allow" ? 2200 : 3200);
-    gate.className = "gate"; S.fired = null; renderRules(); tag(a, ""); home(a); await sleep(350);
+    gate.className = "gate"; document.getElementById("gv").innerHTML = ""; S.fired = null; renderRules(); tag(a, ""); home(a); await sleep(350);
   }
   async function apply(e) {
     switch (e.kind) {
       case "setup": renderRules(); return;
-      case "scene": hideCard(); for (const k in bots) bots[k].classList.remove("talk"); document.querySelectorAll(".chap").forEach(c => c.classList.toggle("on", +c.dataset.n === e.n)); lifeOn(e.lifecycle); banner(e.test ? "LABELLED TEST · agents set to assume-compromised" : "");
-        cap(`Scene ${e.n} · ${e.title}`, esc(e.subtitle) + (e.owasp ? ` <span style="font:.74rem var(--fm)">· OWASP Agentic ${esc(e.owasp)}</span>` : "")); card("", "Scene " + e.n, esc(e.title), esc(e.subtitle)); await sleep(2600); hideCard(); return;
+      case "scene": for (const k in bots) bots[k].classList.remove("talk"); document.querySelectorAll(".chap").forEach(c => c.classList.toggle("on", +c.dataset.n === e.n)); lifeOn(e.lifecycle); banner(e.test ? "LABELLED TEST · agents set to assume-compromised" : "");
+        cap(`Scene ${e.n} · ${e.title}`, esc(e.subtitle) + (e.owasp ? ` <span style="font:.74rem var(--fm)">· OWASP Agentic ${esc(e.owasp)}</span>` : "")); card("", "Scene " + e.n + (e.test ? " · labelled test" : ""), esc(e.title), esc(e.subtitle)); await sleep(3000); return;
       case "ask": say("kenji", e.text, "orchestrator"); tag("kenji", "asks one question"); card("", esc(NAME("kenji")) + " → Orchestrator", "“" + esc(e.text) + "”", "Nothing else is scripted from here."); await sleep(2200); tag("kenji", ""); return;
       case "message": if (e.to === "orchestrator" && e.from === "injected note") { feed("orchestrator", "[injected note] " + e.text); card("deny", "Injected instruction (test)", esc(e.text).slice(0, 220)); await sleep(2000); }
         else if (e.to === "orchestrator" && e.from === "auditor") { say("auditor", e.text, "orchestrator"); tag("auditor", "probing as the trader"); card("ctl", "Auditor → Orchestrator (as " + esc(short("kenji")) + ", sandbox)", "“" + esc(e.text).slice(0, 240) + "”"); await sleep(1800); tag("auditor", ""); }
-        else if (e.to === "compliance") { tag("compliance", "reviewing"); await sleep(300); }
-        else if (e.chain.length > 2) { say(e.chain[e.chain.length - 2], e.text, e.to); await sleep(readTime(e.text) * .6); }
+        else if (e.to === "compliance") { tag("compliance", "reviewing"); card("ctl", "Governance → Compliance", "Compliance reviews the proposal against the written policy.", "Nothing changes in the rulebook unless Compliance approves."); await sleep(900); }
+        else if (e.to === "governance") { card("ctl", "Governance is given a task", esc(e.text).slice(0, 200), "Governance only acts when something needs it."); await sleep(900); }
+        else if (e.to === "auditor") { card("ctl", "Auditor starts", esc(e.text), "It reads the rules and the Gate log, then probes on its own, with no hints."); await sleep(900); }
+        else if (e.chain.length > 2) { say(e.chain[e.chain.length - 2], e.text, e.to); card("", esc(short(e.chain[e.chain.length - 2])) + " → " + esc(NAME(e.to)) + " · for " + esc(short(e.chain[0])), "“" + esc(e.text).slice(0, 200) + "”", "The request carries " + esc(short(e.chain[0])) + "'s identity, so the specialist can only get what he may see."); await sleep(readTime(e.text) * .6); }
         return;
-      case "say": say(e.agent, e.text); await sleep(readTime(e.text)); return;
+      case "say": say(e.agent, e.text); card(["governance", "auditor", "compliance"].includes(e.agent) ? "ctl" : "", esc(NAME(e.agent)) + " says", esc(e.text).slice(0, 220), ["governance", "auditor", "compliance"].includes(e.agent) ? "A control agent explaining its reasoning." : e.agent === "orchestrator" ? "The Orchestrator combines what the specialists returned; it never sees more than the trader may." : "The specialist reports back what the Gate let it see."); await sleep(readTime(e.text)); return;
       case "gateway": await gateway(e); return;
       case "wake": bots[e.agent] && bots[e.agent].classList.add("awake"); tag(e.agent, e.trigger); card("ctl", NAME(e.agent) + " wakes", esc(e.trigger)); cap(`${NAME(e.agent)} wakes`, "Trigger: " + esc(e.trigger) + ". Control agents only run when something needs them."); await sleep(1400); return;
       case "act": tag(e.agent, LABEL[e.tool] || e.tool); card("ctl", NAME(e.agent), esc(LABEL[e.tool] || e.tool) + (argsTxt(e.args) ? ` <span class="sub">(${esc(argsTxt(e.args))})</span>` : "")); await sleep(900); return;
@@ -315,7 +394,8 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
       case "alert": S.loop = 1; renderLoop(); card("deny", e.type === "exposure" ? "Data-exposure alert → Governance" : "Incident alert → Governance", esc(e.text), "Gate events: " + esc((e.events || []).map(n => "#" + n).join(", ")));
         cap(e.type === "exposure" ? "Another desk's data reached the trader" : "Incident alert", e.type === "exposure" ? "The Gate's code detector caught it (like a data-loss-prevention control) and wakes Governance. This is the loop starting from a real incident." : "Any attempted write by an agent, or repeated attempts to read another desk, wakes Governance."); await sleep(2600); return;
       case "human": S.iso.forEach(a => bots[a] && bots[a].classList.remove("iso")); S.iso.clear(); ["orchestrator", "trade", "market", "position", "risk"].forEach(home); renderRules(); card("", "Human step", esc(e.text)); await sleep(2000); return;
-      case "probe": tag("auditor", "probe " + e.n); return;
+      case "probe": tag("auditor", "probe " + e.n); card("ctl", "Auditor · probe " + e.n + " of 8 · sandbox", "“" + esc(e.text).slice(0, 200) + "”", "Sent as the trader to a compromised Orchestrator. If anything about another desk comes back, the Auditor reports it."); await sleep(1200); return;
+      case "limit": card("deny", esc(NAME(e.agent)) + " · spec limit", "Stopped: " + esc(e.what), esc(e.detail)); feed(e.agent, "[stopped by its spec: " + e.what + " · " + e.detail + "]"); await sleep(1600); return;
       case "nudge": card("ctl", NAME(e.agent) + ": decision required", "The harness requires every control task to end in a decision. The choice is the agent's."); await sleep(900); return;
       case "finding": S.loop = e.confirmed ? 1 : S.loop; renderLoop(); tag("auditor", e.confirmed ? "gap confirmed" : "not confirmed");
         card(e.confirmed ? "deny" : "", "Auditor reports: " + esc(e.title), e.confirmed ? "Confirmed by code: " + esc(e.verified_by_code.join("; ")) : "Not confirmed: no Gate event showed other-desk data.", esc(e.evidence)); await sleep(2600); tag("auditor", ""); return;
@@ -332,7 +412,7 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
   function stopP() { timer = false; document.getElementById("play").textContent = ptr >= E.length ? "▶ Replay" : "▶ Play"; }
   function reset() { stopP(); ptr = 0; resetState(); hideCard(); banner(""); gate.className = "gate";
     for (const k in bots) { bots[k].classList.remove("busy", "talk", "iso", "awake"); tag(k, ""); move(k, HOME[k]); }
-    document.getElementById("feed").innerHTML = ""; renderRules(); renderLoop(); scoreboard(null); document.getElementById("ans").innerHTML = '<h3>What the trader gets</h3><p class="sub">Appears when the Orchestrator answers.</p>'; lifeOn(null);
+    document.getElementById("feed").innerHTML = ""; renderRules(); renderLoop(); scoreboard((E.find(e => e.kind === "done") || {}).summary || null); document.getElementById("ans").innerHTML = '<h3>What the trader gets</h3><p class="sub">Appears when the Orchestrator answers.</p>'; lifeOn(null);
     cap("Ready", "Press Play. Use the scene buttons to jump."); if (E[0] && E[0].kind === "setup") { apply(E[0]); ptr = 1; } }
   async function jump(n) { stopP(); reset(); const target = E.findIndex(e => e.kind === "scene" && e.n === n); if (target < 0) return;
     instant = true; stage.classList.add("instant"); while (ptr < target) await playOne(); instant = false; requestAnimationFrame(() => stage.classList.remove("instant")); play(); }
@@ -342,7 +422,7 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
   document.getElementById("step").onclick = async () => { if (busy) return; stopP(); await playOne(); };
   document.getElementById("restart").onclick = reset;
   document.querySelectorAll(".speed button").forEach(b => b.onclick = () => { speed = +b.dataset.s; document.querySelectorAll(".speed button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); });
-  function footer() { const s = (E.find(e => e.kind === "done") || {}).summary; if (!s) { document.getElementById("foot").textContent = LIVE ? "Live run in progress." : ""; return; }
+  function footer() { scoreboard((E.find(e => e.kind === "done") || {}).summary || null); const s = (E.find(e => e.kind === "done") || {}).summary; if (!s) { document.getElementById("foot").textContent = LIVE ? "Live run in progress." : ""; return; }
     const d = new Date(s.run_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
     document.getElementById("foot").textContent = `${LIVE ? "Live run" : "Recorded run"} ${d} IST · ${s.model} via Straive LLM Foundry · ${s.calls} model calls · about ₹${s.cost_inr}.`; }
   window.__FLOOR = { E, chapters, footer, reset, play, isLive: LIVE };

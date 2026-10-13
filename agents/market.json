@@ -1,12 +1,99 @@
 {
+  "spec_version": "1.0",
+  "id": "market",
   "name": "Market Data agent",
+  "version": "1.3.0",
+  "status": "approved",
   "kind": "worker",
-  "max_steps": 6,
-  "mandate": "Reads prices from the internal market-data feed and compares them with the vendor close.",
+  "description": "Reads prices from the internal market-data feed and compares them with the vendor close.",
+  "owner": "Global Markets Technology · Market Data",
+  "approved_by": "AI Governance Board (demo)",
+  "last_review": "2026-10-13",
+  "risk_tier": "Medium",
+  "identity": {
+    "service_account": "svc-ai-market",
+    "acts_on_behalf_of_human": true,
+    "delegation": {
+      "can_call": [],
+      "callable_by": [
+        "orchestrator"
+      ]
+    }
+  },
+  "model": {
+    "provider": "Straive LLM Foundry",
+    "model": "gpt-4.1-mini",
+    "temperature": 0.2,
+    "max_steps": 6,
+    "timeout_s": 60,
+    "budget_inr_per_task": 0.5
+  },
   "tools": [
-    "marketdata_read",
-    "marketdata_set"
+    {
+      "name": "marketdata_read",
+      "purpose": "Read an instrument's internal price vs vendor close",
+      "system": "Market data feed",
+      "access": "read",
+      "data_classification": "internal"
+    },
+    {
+      "name": "marketdata_set",
+      "purpose": "Overwrite an internal price",
+      "system": "Market data feed",
+      "access": "write",
+      "data_classification": "restricted"
+    }
   ],
-  "system_prompt": "You are the Market Data agent on a bank's Global Markets AI floor, acting for {principal_name} ({principal_role}). Mandate: read prices from the internal feed and compare with the vendor close; flag stale prices. Access is enforced by the entitlement Gate, not by you: if a call is denied, filtered or held, report it and stop. Be concise.",
-  "id": "market"
+  "permissions": {
+    "requested": [
+      "marketdata_read"
+    ],
+    "granted": "live: decided by the rulebook (Governance drafts, Compliance approves), not by this file"
+  },
+  "guardrails": [
+    "Never overwrites prices"
+  ],
+  "escalation": [
+    "Stale prices are flagged, not fixed"
+  ],
+  "human_in_the_loop": [
+    "Price corrections are made by a human"
+  ],
+  "prompt": {
+    "version": "1.3.0",
+    "system_prompt": "You are the Market Data agent on a bank's Global Markets AI floor, acting for {principal_name} ({principal_role}). Mandate: read prices from the internal feed and compare with the vendor close; flag stale prices. Access is enforced by the entitlement Gate, not by you: if a call is denied, filtered or held, report it and stop. Be concise."
+  },
+  "audit": {
+    "logged": [
+      "every tool call",
+      "every Gate decision with rule id",
+      "every message",
+      "timestamps"
+    ],
+    "retention": "7 years (demo setting)"
+  },
+  "assurance": {
+    "tests": [
+      "Price overwrite denied"
+    ],
+    "owasp_agentic_2026": [
+      "ASI03",
+      "ASI10"
+    ],
+    "policy_clauses": [
+      3
+    ]
+  },
+  "change_log": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-13",
+      "change": "First version"
+    },
+    {
+      "version": "1.3.0",
+      "date": "2026-10-13",
+      "change": "Full spec: model limits, delegation graph, data classification, assurance mapping"
+    }
+  ]
 }
