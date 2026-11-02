@@ -69,7 +69,7 @@ a{color:var(--accent)}
 <p class="m">The agents and the control logic are real. The bank around them is simulated. This is a working model of the control, not a deployed system.</p>
 <div class="tw"><table>
 <tr><th>Piece</th><th>In this prototype</th><th>In production</th></tr>
-<tr><td>Agents</td><td><b>Real.</b> Each is an LLM (gpt-4.1-mini on Straive LLM Foundry) with its own versioned spec, tools and limits, running a tool-calling loop. Every decision on screen was the model's.</td><td>Same pattern on an agent platform (e.g. LangGraph, AWS Bedrock AgentCore, OpenAI Agents SDK), running persistently and concurrently</td></tr>
+<tr><td>Agents</td><td><b>Real.</b> Each is an LLM (gpt-4.1-mini on LLM Foundry) with its own versioned spec, tools and limits, running a tool-calling loop. Every decision on screen was the model's.</td><td>Same pattern on an agent platform (e.g. LangGraph, AWS Bedrock AgentCore, OpenAI Agents SDK), running persistently and concurrently</td></tr>
 <tr><td>The Gate</td><td><b>Real code</b>, deterministic and unit-tested: agent mandate ∩ human entitlement, default deny, every decision logged with its rule</td><td>A policy engine (e.g. OPA or Cedar) in an API gateway in front of every system</td></tr>
 <tr><td>Bank systems</td><td><b>Simulated</b>: synthetic trades, books, prices and exposures in memory</td><td>The bank's trade capture, positions, market data and risk APIs (or MCP servers)</td></tr>
 <tr><td>Identity</td><td><b>Simulated</b>: the trader is an identity carried through every call chain</td><td>The bank's identity provider (Okta, Entra) with delegated, scoped tokens (OAuth token exchange)</td></tr>
@@ -82,7 +82,7 @@ a{color:var(--accent)}
 <li>Synthetic data and fictional clients; one trader, two desks, four systems. It demonstrates the method, not coverage of 160+ systems.</li>
 <li>The Auditor runs agents in an explicit “assume compromised” mode, because a control has to hold even when the agent misbehaves.</li>
 <li>Control-testing agents add to human penetration testing; they don't replace it.</li>
-<li>The default page is a replay of one recorded real run (GPT-4.1-mini via Straive LLM Foundry); the same floor also runs live on a laptop.</li>
+<li>The default page is a replay of one recorded real run (GPT-4.1-mini via LLM Foundry); the same floor also runs live on a laptop.</li>
 <li>All eight agents are real (system prompt, tools, tool-calling loop; definitions in agents/*.json). Scripted: the trader's one question, the labelled injected-instruction test, and the triggers that wake control agents. The Compliance agent stands in for a human; in live mode a person approves.</li>
 </ul></section>
 </div><script>(()=>{const b=document.getElementById("theme");const s=t=>{document.documentElement.setAttribute("data-theme",t);b.textContent=t==="light"?"☾ Dark":"☀ Light";try{localStorage.setItem("aiagov-theme",t)}catch(x){}};let v=null;try{v=localStorage.getItem("aiagov-theme")}catch(x){}s(v||"dark");b.onclick=()=>s(document.documentElement.getAttribute("data-theme")==="light"?"dark":"light")})();</script></body></html>
